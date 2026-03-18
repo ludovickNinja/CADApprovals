@@ -86,7 +86,7 @@ button:hover {
   padding: 28px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 28px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.82) 0%, rgba(248, 250, 252, 0.64) 100%),
     rgba(255, 255, 255, 0.5);
@@ -142,7 +142,8 @@ input[readonly] {
 .nav-cards {
   display: grid;
   gap: 12px;
-  margin: 32px 0;
+  margin: auto 0 0;
+  order: 3;
 }
 
 .nav-card,
@@ -176,6 +177,7 @@ input[readonly] {
 .sidebar-metrics {
   display: grid;
   gap: 12px;
+  order: 2;
 }
 
 .sidebar-metrics article,
