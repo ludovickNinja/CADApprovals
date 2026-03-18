@@ -1,6 +1,7 @@
 const TODAY = '2026-03-18';
 const TIMESTAMP = '2026-03-18 10:00 UTC';
 const CREATIONS_FACTORY = 'Creations';
+const MESSAGE_TIME = '10:00 UTC';
 
 const uidCatalog = {
   'UID-20481': {
@@ -78,6 +79,7 @@ const lines = [
 ];
 
 let selectedLineId = lines[0]?.id ?? null;
+let selectedFactoryLineId = lines[0]?.id ?? null;
 
 const factoryTableBody = document.querySelector('#factory-table-body');
 const adminLineList = document.querySelector('#admin-line-list');
@@ -102,6 +104,16 @@ const cadFileInput = document.querySelector('#cad-file');
 const specFileInput = document.querySelector('#spec-file');
 const etaInput = document.querySelector('#eta');
 const noteInput = document.querySelector('#factory-note');
+const factoryDetail = document.querySelector('#factory-detail');
+const factoryEmptyState = document.querySelector('#factory-empty-state');
+const factoryDetailTitle = document.querySelector('#factory-detail-title');
+const factoryDetailStatus = document.querySelector('#factory-detail-status');
+const factoryDetailMeta = document.querySelector('#factory-detail-meta');
+const factoryDetailFiles = document.querySelector('#factory-detail-files');
+const factoryChatThread = document.querySelector('#factory-chat-thread');
+const factoryChatForm = document.querySelector('#factory-chat-form');
+const factoryChatInput = document.querySelector('#factory-chat-input');
+const factoryDiscussionCopy = document.querySelector('#factory-discussion-copy');
 
 function createStatusBadge(status) {
   return `<span class="status-badge" data-status="${status}">${status}</span>`;
@@ -109,6 +121,27 @@ function createStatusBadge(status) {
 
 function normalizeUid(value) {
   return value.trim().toUpperCase();
+}
+
+function createFileCard(label, fileName, description) {
+  return `
+    <article class="file-card">
+      <strong>${label}</strong>
+      <p>${fileName}</p>
+      <small>${description}</small>
+    </article>
+  `;
+}
+
+function createMessageMarkup(message) {
+  return `
+    <article class="message ${message.author.toLowerCase()}">
+      <header>
+        <strong>${message.author}</strong>
+        <time>${message.time}</time>
+      </header>
+      <p>${message.body}</p>
+    </article>`;
 }
 
 function applyUidAutofill(uid) {
@@ -154,7 +187,7 @@ function renderFactoryTable() {
   factoryTableBody.innerHTML = lines
     .map(
       (line) => `
-        <tr>
+        <tr class="factory-row ${line.id === selectedFactoryLineId ? 'active' : ''}" data-factory-line-id="${line.id}">
           <td>
             <strong>${line.factoryName}</strong>
             <div class="muted">${line.style}</div>
@@ -225,29 +258,81 @@ function renderAdminDetail() {
     </article>
   `;
 
-  detailFiles.innerHTML = `
-    <article class="file-card">
-      <strong>CAD file</strong>
-      <p>${line.cadFile}</p>
+  detailFiles.innerHTML = [
+    createFileCard('CAD file', line.cadFile, 'Primary geometry package submitted by the factory.'),
+    createFileCard('Spec sheet', line.specFile, 'Reference dimensions and manufacturing notes for admin review.')
+  ].join('');
+
+  chatThread.innerHTML = line.messages.map(createMessageMarkup).join('');
+}
+
+function renderFactoryDetail() {
+  const line = lines.find((entry) => entry.id === selectedFactoryLineId);
+
+  if (!line) {
+    factoryDetail.classList.add('hidden');
+    factoryEmptyState.classList.remove('hidden');
+    return;
+  }
+
+  factoryDetail.classList.remove('hidden');
+  factoryEmptyState.classList.add('hidden');
+
+  factoryDetailTitle.textContent = `${line.style} · ${line.factoryName}`;
+  factoryDetailStatus.dataset.status = line.status;
+  factoryDetailStatus.textContent = line.status;
+
+  factoryDetailMeta.innerHTML = `
+    <article>
+      <strong>Barcode / UID</strong>
+      <p>${line.barcode || 'Not provided'}</p>
     </article>
-    <article class="file-card">
-      <strong>Spec sheet</strong>
-      <p>${line.specFile}</p>
+    <article>
+      <strong>Web Order #</strong>
+      <p>${line.webOrder || 'Not provided'}</p>
+    </article>
+    <article>
+      <strong>Requested approval</strong>
+      <p>${line.eta}</p>
+    </article>
+    <article>
+      <strong>Last updated</strong>
+      <p>${line.updatedAt}</p>
+    </article>
+    <article>
+      <strong>Factory note</strong>
+      <p>${line.note || 'No note added.'}</p>
+    </article>
+    <article>
+      <strong>Discussion access</strong>
+      <p>${line.status === 'Revision' ? 'Enabled for this revision cycle.' : 'Available only after admin marks the line as Revision.'}</p>
     </article>
   `;
 
-  chatThread.innerHTML = line.messages
-    .map(
-      (message) => `
-      <article class="message ${message.author.toLowerCase()}">
+  factoryDetailFiles.innerHTML = [
+    createFileCard('CAD file provided', line.cadFile, 'The CAD file currently attached to this submission.'),
+    createFileCard('Spec sheet provided', line.specFile, 'The matching specification sheet shared with admin.'),
+    createFileCard('Submission status', line.status, 'Current decision state for this exact file package.'),
+    createFileCard('Package timestamp', line.updatedAt, 'Most recent time this line or thread was updated.')
+  ].join('');
+
+  if (line.status === 'Revision') {
+    factoryDiscussionCopy.textContent = 'Admin comments and factory replies are available while the line is in Revision.';
+    factoryChatThread.innerHTML = line.messages.map(createMessageMarkup).join('');
+    factoryChatForm.classList.remove('hidden');
+  } else {
+    factoryDiscussionCopy.textContent = 'Discussion becomes available when a line is marked as Revision.';
+    factoryChatThread.innerHTML = `
+      <article class="message system-message">
         <header>
-          <strong>${message.author}</strong>
-          <time>${message.time}</time>
+          <strong>Discussion locked</strong>
+          <time>${line.updatedAt}</time>
         </header>
-        <p>${message.body}</p>
-      </article>`
-    )
-    .join('');
+        <p>This line is currently ${line.status}. Select a Revision line to review admin comments and respond.</p>
+      </article>`;
+    factoryChatForm.classList.add('hidden');
+    factoryChatInput.value = '';
+  }
 }
 
 function renderMetrics() {
@@ -258,6 +343,7 @@ function renderMetrics() {
 
 function rerender() {
   renderFactoryTable();
+  renderFactoryDetail();
   renderAdminList();
   renderAdminDetail();
   renderMetrics();
@@ -271,9 +357,10 @@ function setStatus(status, commentBody) {
   line.updatedAt = TIMESTAMP;
 
   if (commentBody) {
-    line.messages.push({ author: 'Admin', body: commentBody, time: '10:00 UTC' });
+    line.messages.push({ author: 'Admin', body: commentBody, time: MESSAGE_TIME });
   }
 
+  selectedFactoryLineId = line.id;
   rerender();
 }
 
@@ -309,11 +396,12 @@ lineForm.addEventListener('submit', (event) => {
     status: 'File Uploaded',
     updatedAt: TIMESTAMP,
     note: String(formData.get('note')).trim(),
-    messages: [{ author: 'Factory', body: 'New CAD/spec pack uploaded and waiting for admin review.', time: '10:00 UTC' }]
+    messages: [{ author: 'Factory', body: 'New CAD/spec pack uploaded and waiting for admin review.', time: MESSAGE_TIME }]
   };
 
   lines.unshift(newLine);
   selectedLineId = newLine.id;
+  selectedFactoryLineId = newLine.id;
   event.currentTarget.reset();
   factoryNameInput.value = CREATIONS_FACTORY;
   etaInput.value = TODAY;
@@ -332,9 +420,26 @@ document.querySelector('#chat-form').addEventListener('submit', (event) => {
   const line = lines.find((entry) => entry.id === selectedLineId);
   if (!line) return;
 
-  line.messages.push({ author: 'Admin', body, time: '10:00 UTC' });
+  line.messages.push({ author: 'Admin', body, time: MESSAGE_TIME });
   line.updatedAt = TIMESTAMP;
+  selectedFactoryLineId = line.id;
   input.value = '';
+  rerender();
+});
+
+factoryChatForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const body = factoryChatInput.value.trim();
+
+  if (!body) return;
+
+  const line = lines.find((entry) => entry.id === selectedFactoryLineId);
+  if (!line || line.status !== 'Revision') return;
+
+  line.messages.push({ author: 'Factory', body, time: MESSAGE_TIME });
+  line.updatedAt = TIMESTAMP;
+  selectedLineId = line.id;
+  factoryChatInput.value = '';
   rerender();
 });
 
@@ -349,6 +454,14 @@ document.addEventListener('click', (event) => {
   const adminCard = event.target.closest('[data-line-id]');
   if (adminCard) {
     selectedLineId = Number(adminCard.dataset.lineId);
+    rerender();
+  }
+
+  const factoryRow = event.target.closest('[data-factory-line-id]');
+  if (factoryRow) {
+    const lineId = Number(factoryRow.dataset.factoryLineId);
+    selectedFactoryLineId = lineId;
+    selectedLineId = lineId;
     rerender();
   }
 

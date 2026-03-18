@@ -247,6 +247,10 @@ input[readonly] {
   gap: 24px;
 }
 
+.factory-grid {
+  margin-bottom: 24px;
+}
+
 .admin-grid {
   grid-template-columns: 360px 1fr;
 }
@@ -384,6 +388,16 @@ th {
   letter-spacing: 0.08em;
 }
 
+.factory-row {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.factory-row:hover,
+.factory-row.active {
+  background: rgba(219, 234, 254, 0.35);
+}
+
 .status-badge[data-status='File Uploaded'] {
   color: var(--accent);
   background: rgba(219, 234, 254, 0.9);
@@ -414,6 +428,11 @@ time {
   color: var(--muted);
 }
 
+.file-card small {
+  display: block;
+  margin-top: 8px;
+}
+
 .hidden {
   display: none;
 }
@@ -425,12 +444,20 @@ time {
   text-align: center;
 }
 
+.empty-state.compact {
+  min-height: 280px;
+}
+
 .detail-meta,
 .file-cards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
   margin: 20px 0;
+}
+
+.file-cards.detailed {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .file-card strong,
@@ -449,6 +476,20 @@ time {
 
 .message.factory {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(248, 250, 252, 0.78));
+}
+
+.message.system-message {
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.95), rgba(226, 232, 240, 0.75));
+}
+
+.revision-thread-panel {
+  margin-top: 8px;
+}
+
+@media (max-width: 1320px) {
+  .file-cards.detailed {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 1120px) {
@@ -484,7 +525,8 @@ time {
   .input-row,
   .chat-actions,
   .detail-meta,
-  .file-cards {
+  .file-cards,
+  .file-cards.detailed {
     grid-template-columns: 1fr;
     display: grid;
   }
