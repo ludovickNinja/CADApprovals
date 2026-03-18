@@ -438,14 +438,14 @@ time {
 }
 
 .empty-state {
-  min-height: 520px;
+  min-height: 280px;
   display: grid;
   place-content: center;
   text-align: center;
 }
 
 .empty-state.compact {
-  min-height: 280px;
+  min-height: 220px;
 }
 
 .detail-meta,

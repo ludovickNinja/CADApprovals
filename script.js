@@ -1,6 +1,7 @@
 const TODAY = '2026-03-18';
 const TIMESTAMP = '2026-03-18 10:00 UTC';
 const CREATIONS_FACTORY = 'Creations';
+const CROWNRING_REVIEWER = 'CrownRing';
 const MESSAGE_TIME = '10:00 UTC';
 
 const uidCatalog = {
@@ -40,7 +41,7 @@ const lines = [
     status: 'File Uploaded',
     updatedAt: '2026-03-18 08:45 UTC',
     note: 'Stone dimensions confirmed. Gallery rail updated before production release.',
-    messages: [{ author: 'Factory', body: 'Initial CAD and spec sheet uploaded for approval.', time: '08:45 UTC' }]
+    messages: [{ author: CREATIONS_FACTORY, body: 'Initial CAD and spec sheet uploaded for approval.', time: '08:45 UTC' }]
   },
   {
     id: 2,
@@ -55,8 +56,8 @@ const lines = [
     updatedAt: '2026-03-18 09:15 UTC',
     note: 'Please confirm cathedral shoulder thickness after previous comments.',
     messages: [
-      { author: 'Factory', body: 'Updated CAD pack attached with slimmer basket profile.', time: '09:02 UTC' },
-      { author: 'Admin', body: 'Please revise shoulder thickness to match approved render and re-upload.', time: '09:15 UTC' }
+      { author: CREATIONS_FACTORY, body: 'Updated CAD pack attached with slimmer basket profile.', time: '09:02 UTC' },
+      { author: CROWNRING_REVIEWER, body: 'Please revise shoulder thickness to match approved render and re-upload.', time: '09:15 UTC' }
     ]
   },
   {
@@ -72,8 +73,8 @@ const lines = [
     updatedAt: '2026-03-18 07:10 UTC',
     note: 'Approved for production once stone seat depth is confirmed internally.',
     messages: [
-      { author: 'Factory', body: 'Final trellis update uploaded for sign-off.', time: '07:00 UTC' },
-      { author: 'Admin', body: 'Approved. Ring can move into production.', time: '07:10 UTC' }
+      { author: CREATIONS_FACTORY, body: 'Final trellis update uploaded for sign-off.', time: '07:00 UTC' },
+      { author: CROWNRING_REVIEWER, body: 'Approved. Ring can move into production.', time: '07:10 UTC' }
     ]
   }
 ];
@@ -123,6 +124,11 @@ function normalizeUid(value) {
   return value.trim().toUpperCase();
 }
 
+
+function getMessageRoleClass(author) {
+  return author === CROWNRING_REVIEWER ? 'admin' : author === CREATIONS_FACTORY ? 'factory' : 'system-message';
+}
+
 function createFileCard(label, fileName, description) {
   return `
     <article class="file-card">
@@ -135,7 +141,7 @@ function createFileCard(label, fileName, description) {
 
 function createMessageMarkup(message) {
   return `
-    <article class="message ${message.author.toLowerCase()}">
+    <article class="message ${getMessageRoleClass(message.author)}">
       <header>
         <strong>${message.author}</strong>
         <time>${message.time}</time>
@@ -253,7 +259,7 @@ function renderAdminDetail() {
       <p>${line.eta}</p>
     </article>
     <article>
-      <strong>Factory note</strong>
+      <strong>Creations note</strong>
       <p>${line.note || 'No note added.'}</p>
     </article>
   `;
@@ -300,24 +306,19 @@ function renderFactoryDetail() {
       <p>${line.updatedAt}</p>
     </article>
     <article>
-      <strong>Factory note</strong>
+      <strong>Creations note</strong>
       <p>${line.note || 'No note added.'}</p>
-    </article>
-    <article>
-      <strong>Discussion access</strong>
-      <p>${line.status === 'Revision' ? 'Enabled for this revision cycle.' : 'Available only after admin marks the line as Revision.'}</p>
     </article>
   `;
 
   factoryDetailFiles.innerHTML = [
     createFileCard('CAD file provided', line.cadFile, 'The CAD file currently attached to this submission.'),
     createFileCard('Spec sheet provided', line.specFile, 'The matching specification sheet shared with admin.'),
-    createFileCard('Submission status', line.status, 'Current decision state for this exact file package.'),
     createFileCard('Package timestamp', line.updatedAt, 'Most recent time this line or thread was updated.')
   ].join('');
 
   if (line.status === 'Revision') {
-    factoryDiscussionCopy.textContent = 'Admin comments and factory replies are available while the line is in Revision.';
+    factoryDiscussionCopy.textContent = 'CrownRing comments and Creations replies are available while the line is in Revision.';
     factoryChatThread.innerHTML = line.messages.map(createMessageMarkup).join('');
     factoryChatForm.classList.remove('hidden');
   } else {
@@ -328,7 +329,7 @@ function renderFactoryDetail() {
           <strong>Discussion locked</strong>
           <time>${line.updatedAt}</time>
         </header>
-        <p>This line is currently ${line.status}. Select a Revision line to review admin comments and respond.</p>
+        <p>This line is currently ${line.status}. Select a Revision line to review CrownRing comments and respond.</p>
       </article>`;
     factoryChatForm.classList.add('hidden');
     factoryChatInput.value = '';
@@ -357,7 +358,7 @@ function setStatus(status, commentBody) {
   line.updatedAt = TIMESTAMP;
 
   if (commentBody) {
-    line.messages.push({ author: 'Admin', body: commentBody, time: MESSAGE_TIME });
+    line.messages.push({ author: CROWNRING_REVIEWER, body: commentBody, time: MESSAGE_TIME });
   }
 
   selectedFactoryLineId = line.id;
@@ -396,7 +397,7 @@ lineForm.addEventListener('submit', (event) => {
     status: 'File Uploaded',
     updatedAt: TIMESTAMP,
     note: String(formData.get('note')).trim(),
-    messages: [{ author: 'Factory', body: 'New CAD/spec pack uploaded and waiting for admin review.', time: MESSAGE_TIME }]
+    messages: [{ author: CREATIONS_FACTORY, body: 'New CAD/spec pack uploaded and waiting for CrownRing review.', time: MESSAGE_TIME }]
   };
 
   lines.unshift(newLine);
@@ -407,7 +408,7 @@ lineForm.addEventListener('submit', (event) => {
   etaInput.value = TODAY;
   rerender();
   formMessage.style.color = '#86efac';
-  formMessage.textContent = 'Line uploaded successfully. Admin can now review it.';
+  formMessage.textContent = 'Line uploaded successfully. CrownRing can now review it.';
 });
 
 document.querySelector('#chat-form').addEventListener('submit', (event) => {
@@ -420,7 +421,7 @@ document.querySelector('#chat-form').addEventListener('submit', (event) => {
   const line = lines.find((entry) => entry.id === selectedLineId);
   if (!line) return;
 
-  line.messages.push({ author: 'Admin', body, time: MESSAGE_TIME });
+  line.messages.push({ author: CROWNRING_REVIEWER, body, time: MESSAGE_TIME });
   line.updatedAt = TIMESTAMP;
   selectedFactoryLineId = line.id;
   input.value = '';
@@ -436,7 +437,7 @@ factoryChatForm.addEventListener('submit', (event) => {
   const line = lines.find((entry) => entry.id === selectedFactoryLineId);
   if (!line || line.status !== 'Revision') return;
 
-  line.messages.push({ author: 'Factory', body, time: MESSAGE_TIME });
+  line.messages.push({ author: CREATIONS_FACTORY, body, time: MESSAGE_TIME });
   line.updatedAt = TIMESTAMP;
   selectedLineId = line.id;
   factoryChatInput.value = '';
@@ -470,7 +471,7 @@ document.addEventListener('click', (event) => {
     const status = statusAction.dataset.statusAction;
     const note =
       status === 'Revision'
-        ? 'Marked as revision. Please review the latest comments and upload an updated CAD/spec pack.'
+        ? 'Marked as revision. Please review the latest CrownRing comments and upload an updated CAD/spec pack.'
         : 'Approved. Files are accepted and the ring can move toward production.';
     setStatus(status, note);
   }
