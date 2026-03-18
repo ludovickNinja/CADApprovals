@@ -77,7 +77,7 @@
         </header>
 
         <section class="view active" id="factory-view">
-          <div class="panel-grid">
+          <div class="panel-grid factory-grid">
             <section class="panel form-panel">
               <div class="panel-heading">
                 <div>
@@ -163,6 +163,40 @@
               </div>
             </section>
           </div>
+
+          <section class="panel factory-detail-panel">
+            <div id="factory-empty-state" class="empty-state compact hidden">
+              <h3>Select a line</h3>
+              <p>Choose a submission to inspect the full file package and review any revision discussion.</p>
+            </div>
+
+            <div id="factory-detail" class="factory-detail">
+              <div class="detail-header">
+                <div>
+                  <p class="eyebrow">Factory detail</p>
+                  <h3 id="factory-detail-title"></h3>
+                </div>
+                <span id="factory-detail-status" class="status-badge"></span>
+              </div>
+
+              <div class="detail-meta" id="factory-detail-meta"></div>
+              <div class="file-cards detailed" id="factory-detail-files"></div>
+
+              <section class="chat-panel revision-thread-panel">
+                <div class="chat-header">
+                  <h4>Revision discussion</h4>
+                  <p id="factory-discussion-copy">Discussion becomes available when a line is marked as Revision.</p>
+                </div>
+                <div id="factory-chat-thread" class="chat-thread"></div>
+                <form id="factory-chat-form" class="chat-form hidden">
+                  <textarea id="factory-chat-input" rows="3" placeholder="Reply to the revision request with your update..."></textarea>
+                  <div class="chat-actions">
+                    <button type="submit" class="primary-btn">Send factory reply</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </section>
         </section>
 
         <section class="view" id="admin-view">
