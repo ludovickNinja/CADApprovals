@@ -81,6 +81,11 @@ const lines = [
 
 let selectedLineId = lines[0]?.id ?? null;
 let selectedFactoryLineId = lines[0]?.id ?? null;
+let factoryFilters = {
+  query: '',
+  status: 'All Statuses',
+  sort: 'updated-desc'
+};
 
 const factoryTableBody = document.querySelector('#factory-table-body');
 const adminLineList = document.querySelector('#admin-line-list');
@@ -115,6 +120,9 @@ const factoryChatThread = document.querySelector('#factory-chat-thread');
 const factoryChatForm = document.querySelector('#factory-chat-form');
 const factoryChatInput = document.querySelector('#factory-chat-input');
 const factoryDiscussionCopy = document.querySelector('#factory-discussion-copy');
+const queueSearchInput = document.querySelector('#queue-search');
+const queueStatusFilter = document.querySelector('#queue-status-filter');
+const queueSortSelect = document.querySelector('#queue-sort');
 
 function createStatusBadge(status) {
   return `<span class="status-badge" data-status="${status}">${status}</span>`;
@@ -123,7 +131,6 @@ function createStatusBadge(status) {
 function normalizeUid(value) {
   return value.trim().toUpperCase();
 }
-
 
 function getMessageRoleClass(author) {
   return author === CROWNRING_REVIEWER ? 'admin' : author === CREATIONS_FACTORY ? 'factory' : 'system-message';
@@ -148,6 +155,39 @@ function createMessageMarkup(message) {
       </header>
       <p>${message.body}</p>
     </article>`;
+}
+
+function getLatestComment(line) {
+  return [...line.messages].reverse().find((message) => message.author === CROWNRING_REVIEWER) || null;
+}
+
+function getVisibleFactoryLines() {
+  const query = factoryFilters.query.trim().toLowerCase();
+
+  return [...lines]
+    .filter((line) => {
+      const matchesQuery =
+        !query ||
+        [line.style, line.barcode, line.webOrder, line.status, line.cadFile, line.specFile]
+          .filter(Boolean)
+          .some((value) => value.toLowerCase().includes(query));
+
+      const matchesStatus = factoryFilters.status === 'All Statuses' || line.status === factoryFilters.status;
+      return matchesQuery && matchesStatus;
+    })
+    .sort((a, b) => {
+      switch (factoryFilters.sort) {
+        case 'updated-asc':
+          return a.updatedAt.localeCompare(b.updatedAt);
+        case 'style-asc':
+          return a.style.localeCompare(b.style);
+        case 'status-asc':
+          return a.status.localeCompare(b.status) || b.updatedAt.localeCompare(a.updatedAt);
+        case 'updated-desc':
+        default:
+          return b.updatedAt.localeCompare(a.updatedAt);
+      }
+    });
 }
 
 function applyUidAutofill(uid) {
@@ -190,9 +230,17 @@ function applyUidAutofill(uid) {
 }
 
 function renderFactoryTable() {
-  factoryTableBody.innerHTML = lines
-    .map(
-      (line) => `
+  const visibleLines = getVisibleFactoryLines();
+  const selectedVisible = visibleLines.some((line) => line.id === selectedFactoryLineId);
+
+  if (!selectedVisible && visibleLines.length) {
+    selectedFactoryLineId = visibleLines[0].id;
+  }
+
+  factoryTableBody.innerHTML = visibleLines.length
+    ? visibleLines
+        .map(
+          (line) => `
         <tr class="factory-row ${line.id === selectedFactoryLineId ? 'active' : ''}" data-factory-line-id="${line.id}">
           <td>
             <strong>${line.factoryName}</strong>
@@ -209,23 +257,37 @@ function renderFactoryTable() {
           <td>${createStatusBadge(line.status)}</td>
           <td>${line.updatedAt}</td>
         </tr>`
-    )
-    .join('');
+        )
+        .join('')
+    : `
+      <tr>
+        <td colspan="5">
+          <div class="table-empty-state">No submissions match the current search and filter settings.</div>
+        </td>
+      </tr>`;
 
-  lineCountChip.textContent = `${lines.length} active lines`;
+  lineCountChip.textContent = `${visibleLines.length} active line${visibleLines.length === 1 ? '' : 's'}`;
 }
 
 function renderAdminList() {
   adminLineList.innerHTML = lines
-    .map(
-      (line) => `
+    .map((line) => {
+      const latestComment = getLatestComment(line);
+      return `
       <button class="admin-line-card ${line.id === selectedLineId ? 'active' : ''}" data-line-id="${line.id}">
         <strong>${line.style}</strong>
         <p>${line.factoryName}</p>
         <p>${line.barcode || line.webOrder}</p>
-        <div style="margin-top: 12px;">${createStatusBadge(line.status)}</div>
-      </button>`
-    )
+        <div class="admin-line-comment">
+          <span>CrownRing review</span>
+          <p>${latestComment ? latestComment.body : 'No CrownRing comments yet. Review is pending.'}</p>
+        </div>
+        <div class="admin-line-footer">
+          <div>${createStatusBadge(line.status)}</div>
+          <small>${line.messages.length} comment${line.messages.length === 1 ? '' : 's'}</small>
+        </div>
+      </button>`;
+    })
     .join('');
 }
 
@@ -259,6 +321,10 @@ function renderAdminDetail() {
       <p>${line.eta}</p>
     </article>
     <article>
+      <strong>Last updated</strong>
+      <p>${line.updatedAt}</p>
+    </article>
+    <article>
       <strong>Creations note</strong>
       <p>${line.note || 'No note added.'}</p>
     </article>
@@ -266,7 +332,7 @@ function renderAdminDetail() {
 
   detailFiles.innerHTML = [
     createFileCard('CAD file', line.cadFile, 'Primary geometry package submitted by the factory.'),
-    createFileCard('Spec sheet', line.specFile, 'Reference dimensions and manufacturing notes for admin review.')
+    createFileCard('Spec sheet', line.specFile, 'Reference dimensions and manufacturing notes for CrownRing review.')
   ].join('');
 
   chatThread.innerHTML = line.messages.map(createMessageMarkup).join('');
@@ -313,16 +379,16 @@ function renderFactoryDetail() {
 
   factoryDetailFiles.innerHTML = [
     createFileCard('CAD file provided', line.cadFile, 'The CAD file currently attached to this submission.'),
-    createFileCard('Spec sheet provided', line.specFile, 'The matching specification sheet shared with admin.'),
+    createFileCard('Spec sheet provided', line.specFile, 'The matching specification sheet shared with CrownRing.'),
     createFileCard('Package timestamp', line.updatedAt, 'Most recent time this line or thread was updated.')
   ].join('');
 
   if (line.status === 'Revision') {
-    factoryDiscussionCopy.textContent = 'CrownRing comments and Creations replies are available while the line is in Revision.';
+    factoryDiscussionCopy.textContent = 'CrownRing reviews and comments are available while the line is in Revision.';
     factoryChatThread.innerHTML = line.messages.map(createMessageMarkup).join('');
     factoryChatForm.classList.remove('hidden');
   } else {
-    factoryDiscussionCopy.textContent = 'Discussion becomes available when a line is marked as Revision.';
+    factoryDiscussionCopy.textContent = 'CrownRing reviews and comments appear here when a line is marked as Revision.';
     factoryChatThread.innerHTML = `
       <article class="message system-message">
         <header>
@@ -367,6 +433,21 @@ function setStatus(status, commentBody) {
 
 barcodeInput.addEventListener('input', () => {
   applyUidAutofill(barcodeInput.value);
+});
+
+queueSearchInput.addEventListener('input', (event) => {
+  factoryFilters.query = event.currentTarget.value;
+  rerender();
+});
+
+queueStatusFilter.addEventListener('change', (event) => {
+  factoryFilters.status = event.currentTarget.value;
+  rerender();
+});
+
+queueSortSelect.addEventListener('change', (event) => {
+  factoryFilters.sort = event.currentTarget.value;
+  rerender();
 });
 
 lineForm.addEventListener('submit', (event) => {

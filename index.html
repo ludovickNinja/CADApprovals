@@ -54,7 +54,7 @@
         <header class="hero-card">
           <div>
             <p class="eyebrow">Pre-production control</p>
-            <h2>Barcode/UID required for every Creations line.</h2>
+            <h2>Barcode/UID required for every submission.</h2>
             <p>
               Creations uploads CAD and spec sheets first. Entering a known UID auto-fills the linked order details,
               style SKU, and requested approval date so the line is ready for admin review faster.
@@ -67,7 +67,7 @@
             </div>
             <div class="hero-pill">
               <span>Step 2</span>
-              <strong>Admin reviews and comments</strong>
+              <strong>CrownRing reviews and comments</strong>
             </div>
             <div class="hero-pill accent">
               <span>Step 3</span>
@@ -147,6 +147,31 @@
                 <span class="count-chip" id="line-count-chip">0 active lines</span>
               </div>
 
+              <div class="table-toolbar" aria-label="Submission search, filters, and sorting">
+                <label class="toolbar-field toolbar-search">
+                  <span>Search</span>
+                  <input id="queue-search" type="search" placeholder="Search UID, web order, status, or file" />
+                </label>
+                <label class="toolbar-field">
+                  <span>Status</span>
+                  <select id="queue-status-filter">
+                    <option>All Statuses</option>
+                    <option>File Uploaded</option>
+                    <option>Revision</option>
+                    <option>Approved</option>
+                  </select>
+                </label>
+                <label class="toolbar-field">
+                  <span>Sort</span>
+                  <select id="queue-sort">
+                    <option value="updated-desc">Newest activity</option>
+                    <option value="updated-asc">Oldest activity</option>
+                    <option value="style-asc">Ring style A–Z</option>
+                    <option value="status-asc">Status</option>
+                  </select>
+                </label>
+              </div>
+
               <div class="table-wrap">
                 <table>
                   <thead>
@@ -184,7 +209,7 @@
 
               <section class="chat-panel revision-thread-panel">
                 <div class="chat-header">
-                  <h4>Revision discussion</h4>
+                  <h4>CrownRing reviews and comments</h4>
                   <p id="factory-discussion-copy">Discussion becomes available when a line is marked as Revision.</p>
                 </div>
                 <div id="factory-chat-thread" class="chat-thread"></div>
@@ -233,8 +258,8 @@
 
                 <section class="chat-panel">
                   <div class="chat-header">
-                    <h4>Creations conversation</h4>
-                    <p>Use the thread to request updates or confirm approval with Creations.</p>
+                    <h4>CrownRing reviews and comments</h4>
+                    <p>Use the thread to leave CrownRing review notes, request revisions, or confirm approval with Creations.</p>
                   </div>
                   <div id="chat-thread" class="chat-thread"></div>
                   <form id="chat-form" class="chat-form">
