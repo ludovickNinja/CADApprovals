@@ -16,7 +16,7 @@
     <div class="page-shell">
       <aside class="sidebar">
         <div>
-          <p class="eyebrow">Factory Collaboration</p>
+          <p class="eyebrow">Creations collaboration</p>
           <h1>CAD Approvals</h1>
           <p class="sidebar-copy">
             Review inbound CAD packs, spec sheets, and revision loops before rings reach production.
@@ -25,8 +25,8 @@
 
         <nav class="nav-cards" aria-label="Primary views">
           <button class="nav-card active" data-view-target="factory-view">
-            <span>Factory View</span>
-            <small>Submit files & track line status</small>
+            <span>Creations View</span>
+            <small>Submit files &amp; track line status</small>
           </button>
           <button class="nav-card" data-view-target="admin-view">
             <span>Admin View</span>
@@ -54,16 +54,16 @@
         <header class="hero-card">
           <div>
             <p class="eyebrow">Pre-production control</p>
-            <h2>Barcode/UID or Web Order Number required for every line.</h2>
+            <h2>Barcode/UID required for every Creations line.</h2>
             <p>
-              Factories upload CAD and spec sheets first. Admin reviews every line, adds comments in a chat thread,
-              and moves the request to <strong>Revision</strong> or <strong>Approved</strong>.
+              Creations uploads CAD and spec sheets first. Entering a known UID auto-fills the linked order details,
+              style SKU, and requested approval date so the line is ready for admin review faster.
             </p>
           </div>
           <div class="hero-pill-group">
             <div class="hero-pill">
               <span>Step 1</span>
-              <strong>Factory uploads files</strong>
+              <strong>Creations uploads files</strong>
             </div>
             <div class="hero-pill">
               <span>Step 2</span>
@@ -81,7 +81,7 @@
             <section class="panel form-panel">
               <div class="panel-heading">
                 <div>
-                  <p class="eyebrow">Factory intake</p>
+                  <p class="eyebrow">Creations intake</p>
                   <h3>Create a new approval line</h3>
                 </div>
               </div>
@@ -89,13 +89,14 @@
               <form id="line-form" class="line-form">
                 <div class="input-group">
                   <label for="factory-name">Factory</label>
-                  <input id="factory-name" name="factoryName" placeholder="Aurora Setting House" required />
+                  <input id="factory-name" name="factoryName" value="Creations" readonly />
                 </div>
 
                 <div class="input-row">
                   <div class="input-group">
                     <label for="barcode">Barcode / UID</label>
                     <input id="barcode" name="barcode" placeholder="UID-20481" />
+                    <small class="field-hint">Enter a UID to auto-fill the linked web order, ring style, and today's approval date.</small>
                   </div>
                   <div class="input-group">
                     <label for="web-order">Web Order #</label>
@@ -130,7 +131,7 @@
                   <textarea id="factory-note" name="note" rows="4" placeholder="Stone dimensions confirmed. Prongs adjusted for center stone height."></textarea>
                 </div>
 
-                <p class="form-hint">At least one identifier is required: <strong>Barcode/UID</strong> or <strong>Web Order Number</strong>.</p>
+                <p class="form-hint">Use a UID whenever possible so linked order details are filled in automatically for Creations.</p>
                 <p id="form-message" class="form-message" aria-live="polite"></p>
 
                 <button type="submit" class="primary-btn">Upload line for admin review</button>
@@ -141,7 +142,7 @@
               <div class="panel-heading split">
                 <div>
                   <p class="eyebrow">Live queue</p>
-                  <h3>Factory submissions</h3>
+                  <h3>Creations submissions</h3>
                 </div>
                 <span class="count-chip" id="line-count-chip">0 active lines</span>
               </div>

@@ -128,6 +128,17 @@ small,
   color: var(--muted);
 }
 
+.field-hint {
+  display: block;
+  line-height: 1.4;
+}
+
+input[readonly] {
+  background: rgba(241, 245, 249, 0.92);
+  color: var(--muted-strong);
+  cursor: not-allowed;
+}
+
 .nav-cards {
   display: grid;
   gap: 12px;
