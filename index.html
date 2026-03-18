@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CAD Approvals Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <aside class="sidebar">
+        <div>
+          <p class="eyebrow">Factory Collaboration</p>
+          <h1>CAD Approvals</h1>
+          <p class="sidebar-copy">
+            Review inbound CAD packs, spec sheets, and revision loops before rings reach production.
+          </p>
+        </div>
+
+        <nav class="nav-cards" aria-label="Primary views">
+          <button class="nav-card active" data-view-target="factory-view">
+            <span>Factory View</span>
+            <small>Submit files & track line status</small>
+          </button>
+          <button class="nav-card" data-view-target="admin-view">
+            <span>Admin View</span>
+            <small>Review uploads, chat, and request revisions</small>
+          </button>
+        </nav>
+
+        <div class="sidebar-metrics">
+          <article>
+            <strong id="uploaded-count">0</strong>
+            <span>Files Uploaded</span>
+          </article>
+          <article>
+            <strong id="revision-count">0</strong>
+            <span>Need Revision</span>
+          </article>
+          <article>
+            <strong id="approved-count">0</strong>
+            <span>Approved</span>
+          </article>
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="hero-card">
+          <div>
+            <p class="eyebrow">Pre-production control</p>
+            <h2>Barcode/UID or Web Order Number required for every line.</h2>
+            <p>
+              Factories upload CAD and spec sheets first. Admin reviews every line, adds comments in a chat thread,
+              and moves the request to <strong>Revision</strong> or <strong>Approved</strong>.
+            </p>
+          </div>
+          <div class="hero-pill-group">
+            <div class="hero-pill">
+              <span>Step 1</span>
+              <strong>Factory uploads files</strong>
+            </div>
+            <div class="hero-pill">
+              <span>Step 2</span>
+              <strong>Admin reviews and comments</strong>
+            </div>
+            <div class="hero-pill accent">
+              <span>Step 3</span>
+              <strong>Revision or approval</strong>
+            </div>
+          </div>
+        </header>
+
+        <section class="view active" id="factory-view">
+          <div class="panel-grid">
+            <section class="panel form-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Factory intake</p>
+                  <h3>Create a new approval line</h3>
+                </div>
+              </div>
+
+              <form id="line-form" class="line-form">
+                <div class="input-group">
+                  <label for="factory-name">Factory</label>
+                  <input id="factory-name" name="factoryName" placeholder="Aurora Setting House" required />
+                </div>
+
+                <div class="input-row">
+                  <div class="input-group">
+                    <label for="barcode">Barcode / UID</label>
+                    <input id="barcode" name="barcode" placeholder="UID-20481" />
+                  </div>
+                  <div class="input-group">
+                    <label for="web-order">Web Order #</label>
+                    <input id="web-order" name="webOrder" placeholder="WEB-903144" />
+                  </div>
+                </div>
+
+                <div class="input-row">
+                  <div class="input-group">
+                    <label for="style">Ring Style</label>
+                    <input id="style" name="style" placeholder="Oval Solitaire / 18K" required />
+                  </div>
+                  <div class="input-group">
+                    <label for="cad-file">CAD file</label>
+                    <input id="cad-file" name="cadFile" placeholder="oval-solitaire-v2.step" required />
+                  </div>
+                </div>
+
+                <div class="input-row">
+                  <div class="input-group">
+                    <label for="spec-file">Spec sheet</label>
+                    <input id="spec-file" name="specFile" placeholder="oval-solitaire-spec.pdf" required />
+                  </div>
+                  <div class="input-group">
+                    <label for="eta">Requested approval date</label>
+                    <input id="eta" name="eta" type="date" required />
+                  </div>
+                </div>
+
+                <div class="input-group">
+                  <label for="factory-note">Factory note</label>
+                  <textarea id="factory-note" name="note" rows="4" placeholder="Stone dimensions confirmed. Prongs adjusted for center stone height."></textarea>
+                </div>
+
+                <p class="form-hint">At least one identifier is required: <strong>Barcode/UID</strong> or <strong>Web Order Number</strong>.</p>
+                <p id="form-message" class="form-message" aria-live="polite"></p>
+
+                <button type="submit" class="primary-btn">Upload line for admin review</button>
+              </form>
+            </section>
+
+            <section class="panel table-panel">
+              <div class="panel-heading split">
+                <div>
+                  <p class="eyebrow">Live queue</p>
+                  <h3>Factory submissions</h3>
+                </div>
+                <span class="count-chip" id="line-count-chip">0 active lines</span>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Line</th>
+                      <th>Identifiers</th>
+                      <th>Files</th>
+                      <th>Status</th>
+                      <th>Updated</th>
+                    </tr>
+                  </thead>
+                  <tbody id="factory-table-body"></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="admin-view">
+          <div class="panel-grid admin-grid">
+            <section class="panel admin-list-panel">
+              <div class="panel-heading split">
+                <div>
+                  <p class="eyebrow">Admin workspace</p>
+                  <h3>Lines awaiting review</h3>
+                </div>
+                <span class="count-chip">Chat-enabled review</span>
+              </div>
+              <div class="admin-line-list" id="admin-line-list"></div>
+            </section>
+
+            <section class="panel admin-detail-panel">
+              <div id="admin-empty-state" class="empty-state">
+                <h3>Select a line</h3>
+                <p>Choose a file upload from the left to inspect CAD/spec files, read messages, and update the status.</p>
+              </div>
+
+              <div id="admin-detail" class="admin-detail hidden">
+                <div class="detail-header">
+                  <div>
+                    <p class="eyebrow">Selected line</p>
+                    <h3 id="detail-title"></h3>
+                  </div>
+                  <span id="detail-status-badge" class="status-badge"></span>
+                </div>
+
+                <div class="detail-meta" id="detail-meta"></div>
+
+                <div class="file-cards" id="detail-files"></div>
+
+                <section class="chat-panel">
+                  <div class="chat-header">
+                    <h4>Factory conversation</h4>
+                    <p>Use the chat thread to request updates or confirm approval.</p>
+                  </div>
+                  <div id="chat-thread" class="chat-thread"></div>
+                  <form id="chat-form" class="chat-form">
+                    <textarea id="chat-input" rows="3" placeholder="Add feedback for the factory..."></textarea>
+                    <div class="chat-actions">
+                      <button type="button" class="secondary-btn" data-status-action="Revision">Mark as Revision</button>
+                      <button type="button" class="secondary-btn" data-status-action="Approved">Mark as Approved</button>
+                      <button type="submit" class="primary-btn">Send comment</button>
+                    </div>
+                  </form>
+                </section>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
