@@ -665,16 +665,12 @@ function renderFactoryDetail(factory) {
       <strong>${factory} note</strong>
       <p>${line.note || 'No note added.'}</p>
     </article>
-    ${line.sampleSet ? `<article><strong>Sample set #</strong><p>${line.sampleSet}</p></article>` : ''}
-    ${line.metalCallout ? `<article><strong>Metal / plating</strong><p>${line.metalCallout}</p></article>` : ''}
   `;
 
   refs.detailFiles.innerHTML = [
     createFileCard('CAD file provided', line.cadFile, 'The CAD file currently attached to this submission.'),
     createFileCard('Spec sheet provided', line.specFile, 'The matching specification sheet shared with CrownRing.'),
-    createFileCard('Package timestamp', line.updatedAt, 'Most recent time this line or thread was updated.'),
-    ...(line.sampleSet ? [createFileCard('Sample set', line.sampleSet, 'Factory sample-set reference included with the request.')] : []),
-    ...(line.metalCallout ? [createFileCard('Metal / plating', line.metalCallout, 'Factory finish direction attached to the submission.')] : [])
+    createFileCard('Package timestamp', line.updatedAt, 'Most recent time this line or thread was updated.')
   ].join('');
 
   if (line.status === 'Revision') {
