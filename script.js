@@ -1,37 +1,68 @@
 const TODAY = '2026-03-18';
 const TIMESTAMP = '2026-03-18 10:00 UTC';
-const CREATIONS_FACTORY = 'Creations';
 const CROWNRING_REVIEWER = 'CrownRing';
 const MESSAGE_TIME = '10:00 UTC';
+const FACTORIES = ['Creations', 'Uni-Design'];
 
 const uidCatalog = {
-  'UID-20481': {
-    webOrder: 'WEB-903144',
-    style: 'Oval Solitaire / 18K',
-    cadFile: 'oval-solitaire-v2.step',
-    specFile: 'oval-solitaire-spec.pdf',
-    note: 'Stone dimensions confirmed. Gallery rail updated before production release.'
+  Creations: {
+    'UID-20481': {
+      webOrder: 'WEB-903144',
+      style: 'Oval Solitaire / 18K',
+      cadFile: 'oval-solitaire-v2.step',
+      specFile: 'oval-solitaire-spec.pdf',
+      note: 'Stone dimensions confirmed. Gallery rail updated before production release.'
+    },
+    'UID-88310': {
+      webOrder: 'WEB-903201',
+      style: 'Three Stone Trellis / 14K',
+      cadFile: 'trellis-final.step',
+      specFile: 'trellis-final.pdf',
+      note: 'Approved profile retained for production handoff.'
+    },
+    'UID-77142': {
+      webOrder: 'WEB-903322',
+      style: 'Hidden Halo / Platinum',
+      cadFile: 'hidden-halo-r4.step',
+      specFile: 'hidden-halo-r4.pdf',
+      note: 'Center stone seat and hidden halo spacing verified against Creations SKU data.'
+    }
   },
-  'UID-88310': {
-    webOrder: 'WEB-903201',
-    style: 'Three Stone Trellis / 14K',
-    cadFile: 'trellis-final.step',
-    specFile: 'trellis-final.pdf',
-    note: 'Approved profile retained for production handoff.'
-  },
-  'UID-77142': {
-    webOrder: 'WEB-903322',
-    style: 'Hidden Halo / Platinum',
-    cadFile: 'hidden-halo-r4.step',
-    specFile: 'hidden-halo-r4.pdf',
-    note: 'Center stone seat and hidden halo spacing verified against Creations SKU data.'
+  'Uni-Design': {
+    'UNI-50192': {
+      webOrder: 'WEB-905880',
+      style: 'Signature Hidden Halo / 18K',
+      cadFile: 'signature-halo-r2.step',
+      specFile: 'signature-halo-r2.pdf',
+      sampleSet: 'SET-118',
+      metalCallout: '18K Yellow / Bright polish',
+      note: 'Sample set includes alternate head options for CrownRing merchandising review.'
+    },
+    'UNI-77431': {
+      webOrder: 'WEB-905991',
+      style: 'Split Shank Cushion / Platinum',
+      cadFile: 'split-shank-cushion-r5.step',
+      specFile: 'split-shank-cushion-r5.pdf',
+      sampleSet: 'SET-122',
+      metalCallout: 'Platinum / High polish',
+      note: 'Plating and shoulder profile aligned to the showroom sample request.'
+    },
+    'UNI-66420': {
+      webOrder: 'WEB-906114',
+      style: 'Cathedral Emerald / 14K',
+      cadFile: 'cathedral-emerald-r3.step',
+      specFile: 'cathedral-emerald-r3.pdf',
+      sampleSet: 'SET-124',
+      metalCallout: '14K White / Rhodium',
+      note: 'Assembly note added for the under-gallery and bridge support.'
+    }
   }
 };
 
 const lines = [
   {
     id: 1,
-    factoryName: CREATIONS_FACTORY,
+    factoryName: 'Creations',
     barcode: 'UID-20481',
     webOrder: 'WEB-903144',
     style: 'Oval Solitaire / 18K',
@@ -41,11 +72,11 @@ const lines = [
     status: 'File Uploaded',
     updatedAt: '2026-03-18 08:45 UTC',
     note: 'Stone dimensions confirmed. Gallery rail updated before production release.',
-    messages: [{ author: CREATIONS_FACTORY, body: 'Initial CAD and spec sheet uploaded for approval.', time: '08:45 UTC' }]
+    messages: [{ author: 'Creations', body: 'Initial CAD and spec sheet uploaded for approval.', time: '08:45 UTC' }]
   },
   {
     id: 2,
-    factoryName: CREATIONS_FACTORY,
+    factoryName: 'Creations',
     barcode: '',
     webOrder: 'WEB-903322',
     style: 'Hidden Halo / Platinum',
@@ -56,13 +87,13 @@ const lines = [
     updatedAt: '2026-03-18 09:15 UTC',
     note: 'Please confirm cathedral shoulder thickness after previous comments.',
     messages: [
-      { author: CREATIONS_FACTORY, body: 'Updated CAD pack attached with slimmer basket profile.', time: '09:02 UTC' },
+      { author: 'Creations', body: 'Updated CAD pack attached with slimmer basket profile.', time: '09:02 UTC' },
       { author: CROWNRING_REVIEWER, body: 'Please revise shoulder thickness to match approved render and re-upload.', time: '09:15 UTC' }
     ]
   },
   {
     id: 3,
-    factoryName: CREATIONS_FACTORY,
+    factoryName: 'Creations',
     barcode: 'UID-88310',
     webOrder: 'WEB-903201',
     style: 'Three Stone Trellis / 14K',
@@ -73,21 +104,174 @@ const lines = [
     updatedAt: '2026-03-18 07:10 UTC',
     note: 'Approved for production once stone seat depth is confirmed internally.',
     messages: [
-      { author: CREATIONS_FACTORY, body: 'Final trellis update uploaded for sign-off.', time: '07:00 UTC' },
+      { author: 'Creations', body: 'Final trellis update uploaded for sign-off.', time: '07:00 UTC' },
       { author: CROWNRING_REVIEWER, body: 'Approved. Ring can move into production.', time: '07:10 UTC' }
+    ]
+  },
+  {
+    id: 4,
+    factoryName: 'Creations',
+    barcode: 'UID-77142',
+    webOrder: 'WEB-903322',
+    style: 'Hidden Halo / Platinum',
+    cadFile: 'hidden-halo-r4.step',
+    specFile: 'hidden-halo-r4.pdf',
+    eta: '2026-03-19',
+    status: 'File Uploaded',
+    updatedAt: '2026-03-18 09:36 UTC',
+    note: 'Center stone seat and hidden halo spacing verified against Creations SKU data.',
+    messages: [{ author: 'Creations', body: 'New hidden halo revision uploaded with updated seat depth.', time: '09:36 UTC' }]
+  },
+  {
+    id: 5,
+    factoryName: 'Creations',
+    barcode: 'UID-66412',
+    webOrder: 'WEB-903410',
+    style: 'Radiant Cathedral / 18K',
+    cadFile: 'radiant-cathedral-r2.step',
+    specFile: 'radiant-cathedral-r2.pdf',
+    eta: '2026-03-20',
+    status: 'Revision',
+    updatedAt: '2026-03-18 09:48 UTC',
+    note: 'Awaiting feedback on gallery clearance around hidden halo baskets.',
+    messages: [
+      { author: 'Creations', body: 'Sharing updated cathedral shoulders and hidden halo basket clearance.', time: '09:22 UTC' },
+      { author: CROWNRING_REVIEWER, body: 'Please open the gallery by 0.2mm and confirm center-stone clearance in the next upload.', time: '09:48 UTC' }
+    ]
+  },
+  {
+    id: 6,
+    factoryName: 'Creations',
+    barcode: 'UID-66419',
+    webOrder: 'WEB-903512',
+    style: 'Knife Edge Pear / 14K',
+    cadFile: 'knife-edge-pear-r1.step',
+    specFile: 'knife-edge-pear-r1.pdf',
+    eta: '2026-03-21',
+    status: 'Approved',
+    updatedAt: '2026-03-18 08:05 UTC',
+    note: 'Surface break on the shoulder adjusted for cleaner casting.',
+    messages: [
+      { author: 'Creations', body: 'Pear solitaire package uploaded with knife-edge shoulder update.', time: '07:53 UTC' },
+      { author: CROWNRING_REVIEWER, body: 'Approved. Geometry and seat layout match the approved concept.', time: '08:05 UTC' }
+    ]
+  },
+  {
+    id: 7,
+    factoryName: 'Uni-Design',
+    barcode: 'UNI-50192',
+    webOrder: 'WEB-905880',
+    style: 'Signature Hidden Halo / 18K',
+    cadFile: 'signature-halo-r2.step',
+    specFile: 'signature-halo-r2.pdf',
+    eta: '2026-03-18',
+    status: 'File Uploaded',
+    updatedAt: '2026-03-18 09:05 UTC',
+    note: 'Sample set includes alternate head options for CrownRing merchandising review.',
+    sampleSet: 'SET-118',
+    metalCallout: '18K Yellow / Bright polish',
+    messages: [{ author: 'Uni-Design', body: 'Initial sample-set CAD and plating callout uploaded for review.', time: '09:05 UTC' }]
+  },
+  {
+    id: 8,
+    factoryName: 'Uni-Design',
+    barcode: 'UNI-77431',
+    webOrder: 'WEB-905991',
+    style: 'Split Shank Cushion / Platinum',
+    cadFile: 'split-shank-cushion-r5.step',
+    specFile: 'split-shank-cushion-r5.pdf',
+    eta: '2026-03-19',
+    status: 'Revision',
+    updatedAt: '2026-03-18 09:40 UTC',
+    note: 'Plating and shoulder profile aligned to the showroom sample request.',
+    sampleSet: 'SET-122',
+    metalCallout: 'Platinum / High polish',
+    messages: [
+      { author: 'Uni-Design', body: 'Uploaded revised split shank with sample-set finishing notes.', time: '09:12 UTC' },
+      { author: CROWNRING_REVIEWER, body: 'Please reduce the split width near the head and attach the updated plating note.', time: '09:40 UTC' }
+    ]
+  },
+  {
+    id: 9,
+    factoryName: 'Uni-Design',
+    barcode: 'UNI-66420',
+    webOrder: 'WEB-906114',
+    style: 'Cathedral Emerald / 14K',
+    cadFile: 'cathedral-emerald-r3.step',
+    specFile: 'cathedral-emerald-r3.pdf',
+    eta: '2026-03-20',
+    status: 'Approved',
+    updatedAt: '2026-03-18 08:52 UTC',
+    note: 'Assembly note added for the under-gallery and bridge support.',
+    sampleSet: 'SET-124',
+    metalCallout: '14K White / Rhodium',
+    messages: [
+      { author: 'Uni-Design', body: 'Sharing final cathedral emerald package with rhodium callout.', time: '08:34 UTC' },
+      { author: CROWNRING_REVIEWER, body: 'Approved. Assembly note and rhodium direction are complete.', time: '08:52 UTC' }
+    ]
+  },
+  {
+    id: 10,
+    factoryName: 'Uni-Design',
+    barcode: 'UNI-66433',
+    webOrder: 'WEB-906225',
+    style: 'Bezel Marquise / 18K',
+    cadFile: 'bezel-marquise-r2.step',
+    specFile: 'bezel-marquise-r2.pdf',
+    eta: '2026-03-21',
+    status: 'File Uploaded',
+    updatedAt: '2026-03-18 09:58 UTC',
+    note: 'Bezel wall and polish direction tuned to the retail sample brief.',
+    sampleSet: 'SET-130',
+    metalCallout: '18K Rose / Satin bezel',
+    messages: [{ author: 'Uni-Design', body: 'Bezel marquise package uploaded with satin bezel finishing note.', time: '09:58 UTC' }]
+  },
+  {
+    id: 11,
+    factoryName: 'Uni-Design',
+    barcode: 'UNI-66501',
+    webOrder: 'WEB-906318',
+    style: 'East-West Oval / 14K',
+    cadFile: 'east-west-oval-r4.step',
+    specFile: 'east-west-oval-r4.pdf',
+    eta: '2026-03-22',
+    status: 'Revision',
+    updatedAt: '2026-03-18 09:50 UTC',
+    note: 'Awaiting final confirmation on low-profile basket and plating mask zones.',
+    sampleSet: 'SET-133',
+    metalCallout: '14K Yellow / Satin shank + bright prongs',
+    messages: [
+      { author: 'Uni-Design', body: 'Updated low-profile east-west oval with combined satin and bright finish zones.', time: '09:25 UTC' },
+      { author: CROWNRING_REVIEWER, body: 'Please define the plating mask break more clearly near the bridge and re-export the spec.', time: '09:50 UTC' }
+    ]
+  },
+  {
+    id: 12,
+    factoryName: 'Uni-Design',
+    barcode: 'UNI-66514',
+    webOrder: 'WEB-906401',
+    style: 'Double Halo Pear / Platinum',
+    cadFile: 'double-halo-pear-r6.step',
+    specFile: 'double-halo-pear-r6.pdf',
+    eta: '2026-03-22',
+    status: 'Approved',
+    updatedAt: '2026-03-18 08:18 UTC',
+    note: 'Two-stage halo spacing approved against showroom mockup standards.',
+    sampleSet: 'SET-135',
+    metalCallout: 'Platinum / Mirror polish',
+    messages: [
+      { author: 'Uni-Design', body: 'Final double halo pear package uploaded for sign-off.', time: '08:02 UTC' },
+      { author: CROWNRING_REVIEWER, body: 'Approved. Halo spacing and mirror polish direction are ready for production.', time: '08:18 UTC' }
     ]
   }
 ];
 
 let selectedLineId = lines[0]?.id ?? null;
-let selectedFactoryLineId = lines[0]?.id ?? null;
-let factoryFilters = {
-  query: '',
-  status: 'All Statuses',
-  sort: 'updated-desc'
-};
+const selectedFactoryLineIds = Object.fromEntries(FACTORIES.map((factory) => [factory, lines.find((line) => line.factoryName === factory)?.id ?? null]));
+const factoryFilters = Object.fromEntries(
+  FACTORIES.map((factory) => [factory, { query: '', status: 'All Statuses', sort: 'updated-desc' }])
+);
 
-const factoryTableBody = document.querySelector('#factory-table-body');
 const adminLineList = document.querySelector('#admin-line-list');
 const detail = document.querySelector('#admin-detail');
 const emptyState = document.querySelector('#admin-empty-state');
@@ -96,33 +280,32 @@ const detailStatusBadge = document.querySelector('#detail-status-badge');
 const detailMeta = document.querySelector('#detail-meta');
 const detailFiles = document.querySelector('#detail-files');
 const chatThread = document.querySelector('#chat-thread');
-const lineCountChip = document.querySelector('#line-count-chip');
 const uploadedCount = document.querySelector('#uploaded-count');
 const revisionCount = document.querySelector('#revision-count');
 const approvedCount = document.querySelector('#approved-count');
-const formMessage = document.querySelector('#form-message');
-const lineForm = document.querySelector('#line-form');
-const factoryNameInput = document.querySelector('#factory-name');
-const barcodeInput = document.querySelector('#barcode');
-const webOrderInput = document.querySelector('#web-order');
-const styleInput = document.querySelector('#style');
-const cadFileInput = document.querySelector('#cad-file');
-const specFileInput = document.querySelector('#spec-file');
-const etaInput = document.querySelector('#eta');
-const noteInput = document.querySelector('#factory-note');
-const factoryDetail = document.querySelector('#factory-detail');
-const factoryEmptyState = document.querySelector('#factory-empty-state');
-const factoryDetailTitle = document.querySelector('#factory-detail-title');
-const factoryDetailStatus = document.querySelector('#factory-detail-status');
-const factoryDetailMeta = document.querySelector('#factory-detail-meta');
-const factoryDetailFiles = document.querySelector('#factory-detail-files');
-const factoryChatThread = document.querySelector('#factory-chat-thread');
-const factoryChatForm = document.querySelector('#factory-chat-form');
-const factoryChatInput = document.querySelector('#factory-chat-input');
-const factoryDiscussionCopy = document.querySelector('#factory-discussion-copy');
-const queueSearchInput = document.querySelector('#queue-search');
-const queueStatusFilter = document.querySelector('#queue-status-filter');
-const queueSortSelect = document.querySelector('#queue-sort');
+
+function getFactoryRefs(factory) {
+  return {
+    tableBody: document.querySelector(`[data-factory-table-body="${factory}"]`),
+    lineCountChip: document.querySelector(`[data-line-count-chip="${factory}"]`),
+    form: document.querySelector(`[data-factory-form="${factory}"]`),
+    formMessage: document.querySelector(`[data-form-message="${factory}"]`),
+    barcodeInput: document.querySelector(`[data-factory-form="${factory}"] [name="barcode"]`),
+    detail: document.querySelector(`[data-factory-detail="${factory}"]`),
+    emptyState: document.querySelector(`[data-factory-empty-state="${factory}"]`),
+    detailTitle: document.querySelector(`[data-factory-detail-title="${factory}"]`),
+    detailStatus: document.querySelector(`[data-factory-detail-status="${factory}"]`),
+    detailMeta: document.querySelector(`[data-factory-detail-meta="${factory}"]`),
+    detailFiles: document.querySelector(`[data-factory-detail-files="${factory}"]`),
+    discussionCopy: document.querySelector(`[data-factory-discussion-copy="${factory}"]`),
+    chatThread: document.querySelector(`[data-factory-chat-thread="${factory}"]`),
+    chatForm: document.querySelector(`[data-factory-chat-form="${factory}"]`),
+    chatInput: document.querySelector(`[data-factory-chat-input="${factory}"]`),
+    searchInput: document.querySelector(`[data-queue-search="${factory}"]`),
+    statusFilter: document.querySelector(`[data-queue-status-filter="${factory}"]`),
+    sortSelect: document.querySelector(`[data-queue-sort="${factory}"]`)
+  };
+}
 
 function createStatusBadge(status) {
   return `<span class="status-badge" data-status="${status}">${status}</span>`;
@@ -133,7 +316,7 @@ function normalizeUid(value) {
 }
 
 function getMessageRoleClass(author) {
-  return author === CROWNRING_REVIEWER ? 'admin' : author === CREATIONS_FACTORY ? 'factory' : 'system-message';
+  return author === CROWNRING_REVIEWER ? 'admin' : FACTORIES.includes(author) ? 'factory' : 'system-message';
 }
 
 function createFileCard(label, fileName, description) {
@@ -161,22 +344,24 @@ function getLatestComment(line) {
   return [...line.messages].reverse().find((message) => message.author === CROWNRING_REVIEWER) || null;
 }
 
-function getVisibleFactoryLines() {
-  const query = factoryFilters.query.trim().toLowerCase();
+function getVisibleFactoryLines(factory) {
+  const filters = factoryFilters[factory];
+  const query = filters.query.trim().toLowerCase();
 
   return [...lines]
+    .filter((line) => line.factoryName === factory)
     .filter((line) => {
       const matchesQuery =
         !query ||
-        [line.style, line.barcode, line.webOrder, line.status, line.cadFile, line.specFile]
+        [line.style, line.barcode, line.webOrder, line.status, line.cadFile, line.specFile, line.sampleSet, line.metalCallout]
           .filter(Boolean)
           .some((value) => value.toLowerCase().includes(query));
 
-      const matchesStatus = factoryFilters.status === 'All Statuses' || line.status === factoryFilters.status;
+      const matchesStatus = filters.status === 'All Statuses' || line.status === filters.status;
       return matchesQuery && matchesStatus;
     })
     .sort((a, b) => {
-      switch (factoryFilters.sort) {
+      switch (filters.sort) {
         case 'updated-asc':
           return a.updatedAt.localeCompare(b.updatedAt);
         case 'style-asc':
@@ -190,58 +375,68 @@ function getVisibleFactoryLines() {
     });
 }
 
-function applyUidAutofill(uid) {
-  const lookup = uidCatalog[normalizeUid(uid)];
+function applyUidAutofill(factory, uid) {
+  const refs = getFactoryRefs(factory);
+  const lookup = uidCatalog[factory][normalizeUid(uid)];
   const isKnownUid = Boolean(lookup);
+  const form = refs.form;
 
-  factoryNameInput.value = CREATIONS_FACTORY;
+  form.elements.factoryName.value = factory;
 
   if (isKnownUid) {
-    webOrderInput.value = lookup.webOrder;
-    styleInput.value = lookup.style;
-    cadFileInput.value = lookup.cadFile;
-    specFileInput.value = lookup.specFile;
-    noteInput.value = lookup.note;
-    etaInput.value = TODAY;
-    formMessage.style.color = '#2563eb';
-    formMessage.textContent = `UID recognized. Linked Creations order details were filled in for ${normalizeUid(uid)}.`;
+    form.elements.webOrder.value = lookup.webOrder;
+    form.elements.style.value = lookup.style;
+    form.elements.cadFile.value = lookup.cadFile;
+    form.elements.specFile.value = lookup.specFile;
+    form.elements.note.value = lookup.note;
+    form.elements.eta.value = TODAY;
+
+    if (factory === 'Uni-Design') {
+      form.elements.sampleSet.value = lookup.sampleSet;
+      form.elements.metalCallout.value = lookup.metalCallout;
+    }
+
+    refs.formMessage.style.color = '#2563eb';
+    refs.formMessage.textContent = `UID recognized. Linked ${factory} order details were filled in for ${normalizeUid(uid)}.`;
     return;
   }
 
   if (normalizeUid(uid)) {
-    webOrderInput.value = '';
-    styleInput.value = '';
-    cadFileInput.value = '';
-    specFileInput.value = '';
-    noteInput.value = '';
-    etaInput.value = TODAY;
-    formMessage.style.color = '#f59e0b';
-    formMessage.textContent = 'UID not found in the Creations lookup yet. Enter the remaining details manually.';
+    ['webOrder', 'style', 'cadFile', 'specFile', 'note'].forEach((field) => {
+      form.elements[field].value = '';
+    });
+    form.elements.eta.value = TODAY;
+
+    if (factory === 'Uni-Design') {
+      form.elements.sampleSet.value = '';
+      form.elements.metalCallout.value = '';
+    }
+
+    refs.formMessage.style.color = '#f59e0b';
+    refs.formMessage.textContent = `UID not found in the ${factory} lookup yet. Enter the remaining details manually.`;
     return;
   }
 
-  webOrderInput.value = '';
-  styleInput.value = '';
-  cadFileInput.value = '';
-  specFileInput.value = '';
-  noteInput.value = '';
-  etaInput.value = TODAY;
-  formMessage.textContent = '';
+  form.reset();
+  form.elements.factoryName.value = factory;
+  form.elements.eta.value = TODAY;
+  refs.formMessage.textContent = '';
 }
 
-function renderFactoryTable() {
-  const visibleLines = getVisibleFactoryLines();
-  const selectedVisible = visibleLines.some((line) => line.id === selectedFactoryLineId);
+function renderFactoryTable(factory) {
+  const refs = getFactoryRefs(factory);
+  const visibleLines = getVisibleFactoryLines(factory);
+  const selectedVisible = visibleLines.some((line) => line.id === selectedFactoryLineIds[factory]);
 
   if (!selectedVisible && visibleLines.length) {
-    selectedFactoryLineId = visibleLines[0].id;
+    selectedFactoryLineIds[factory] = visibleLines[0].id;
   }
 
-  factoryTableBody.innerHTML = visibleLines.length
+  refs.tableBody.innerHTML = visibleLines.length
     ? visibleLines
         .map(
           (line) => `
-        <tr class="factory-row ${line.id === selectedFactoryLineId ? 'active' : ''}" data-factory-line-id="${line.id}">
+        <tr class="factory-row ${line.id === selectedFactoryLineIds[factory] ? 'active' : ''}" data-factory-line-id="${line.id}" data-factory-name="${factory}">
           <td>
             <strong>${line.factoryName}</strong>
             <div class="muted">${line.style}</div>
@@ -249,6 +444,7 @@ function renderFactoryTable() {
           <td>
             <div>Barcode/UID: ${line.barcode || '—'}</div>
             <div>Web Order: ${line.webOrder || '—'}</div>
+            ${line.sampleSet ? `<div>Sample Set: ${line.sampleSet}</div>` : ''}
           </td>
           <td>
             <div>${line.cadFile}</div>
@@ -266,11 +462,12 @@ function renderFactoryTable() {
         </td>
       </tr>`;
 
-  lineCountChip.textContent = `${visibleLines.length} active line${visibleLines.length === 1 ? '' : 's'}`;
+  refs.lineCountChip.textContent = `${visibleLines.length} active line${visibleLines.length === 1 ? '' : 's'}`;
 }
 
 function renderAdminList() {
-  adminLineList.innerHTML = lines
+  adminLineList.innerHTML = [...lines]
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
     .map((line) => {
       const latestComment = getLatestComment(line);
       return `
@@ -325,36 +522,41 @@ function renderAdminDetail() {
       <p>${line.updatedAt}</p>
     </article>
     <article>
-      <strong>Creations note</strong>
+      <strong>${line.factoryName} note</strong>
       <p>${line.note || 'No note added.'}</p>
     </article>
+    ${line.sampleSet ? `<article><strong>Sample set #</strong><p>${line.sampleSet}</p></article>` : ''}
+    ${line.metalCallout ? `<article><strong>Metal / plating</strong><p>${line.metalCallout}</p></article>` : ''}
   `;
 
   detailFiles.innerHTML = [
     createFileCard('CAD file', line.cadFile, 'Primary geometry package submitted by the factory.'),
-    createFileCard('Spec sheet', line.specFile, 'Reference dimensions and manufacturing notes for CrownRing review.')
+    createFileCard('Spec sheet', line.specFile, 'Reference dimensions and manufacturing notes for CrownRing review.'),
+    ...(line.sampleSet ? [createFileCard('Sample set', line.sampleSet, 'Uni-Design sample set tied to the mockup submission.')] : []),
+    ...(line.metalCallout ? [createFileCard('Metal / plating', line.metalCallout, 'Finish direction supplied with the factory package.')] : [])
   ].join('');
 
   chatThread.innerHTML = line.messages.map(createMessageMarkup).join('');
 }
 
-function renderFactoryDetail() {
-  const line = lines.find((entry) => entry.id === selectedFactoryLineId);
+function renderFactoryDetail(factory) {
+  const refs = getFactoryRefs(factory);
+  const line = lines.find((entry) => entry.id === selectedFactoryLineIds[factory]);
 
   if (!line) {
-    factoryDetail.classList.add('hidden');
-    factoryEmptyState.classList.remove('hidden');
+    refs.detail.classList.add('hidden');
+    refs.emptyState.classList.remove('hidden');
     return;
   }
 
-  factoryDetail.classList.remove('hidden');
-  factoryEmptyState.classList.add('hidden');
+  refs.detail.classList.remove('hidden');
+  refs.emptyState.classList.add('hidden');
 
-  factoryDetailTitle.textContent = `${line.style} · ${line.factoryName}`;
-  factoryDetailStatus.dataset.status = line.status;
-  factoryDetailStatus.textContent = line.status;
+  refs.detailTitle.textContent = `${line.style} · ${line.factoryName}`;
+  refs.detailStatus.dataset.status = line.status;
+  refs.detailStatus.textContent = line.status;
 
-  factoryDetailMeta.innerHTML = `
+  refs.detailMeta.innerHTML = `
     <article>
       <strong>Barcode / UID</strong>
       <p>${line.barcode || 'Not provided'}</p>
@@ -372,24 +574,28 @@ function renderFactoryDetail() {
       <p>${line.updatedAt}</p>
     </article>
     <article>
-      <strong>Creations note</strong>
+      <strong>${factory} note</strong>
       <p>${line.note || 'No note added.'}</p>
     </article>
+    ${line.sampleSet ? `<article><strong>Sample set #</strong><p>${line.sampleSet}</p></article>` : ''}
+    ${line.metalCallout ? `<article><strong>Metal / plating</strong><p>${line.metalCallout}</p></article>` : ''}
   `;
 
-  factoryDetailFiles.innerHTML = [
+  refs.detailFiles.innerHTML = [
     createFileCard('CAD file provided', line.cadFile, 'The CAD file currently attached to this submission.'),
     createFileCard('Spec sheet provided', line.specFile, 'The matching specification sheet shared with CrownRing.'),
-    createFileCard('Package timestamp', line.updatedAt, 'Most recent time this line or thread was updated.')
+    createFileCard('Package timestamp', line.updatedAt, 'Most recent time this line or thread was updated.'),
+    ...(line.sampleSet ? [createFileCard('Sample set', line.sampleSet, 'Factory sample-set reference included with the request.')] : []),
+    ...(line.metalCallout ? [createFileCard('Metal / plating', line.metalCallout, 'Factory finish direction attached to the submission.')] : [])
   ].join('');
 
   if (line.status === 'Revision') {
-    factoryDiscussionCopy.textContent = 'CrownRing reviews and comments are available while the line is in Revision.';
-    factoryChatThread.innerHTML = line.messages.map(createMessageMarkup).join('');
-    factoryChatForm.classList.remove('hidden');
+    refs.discussionCopy.textContent = `CrownRing reviews and comments are available while this ${factory} line is in Revision.`;
+    refs.chatThread.innerHTML = line.messages.map(createMessageMarkup).join('');
+    refs.chatForm.classList.remove('hidden');
   } else {
-    factoryDiscussionCopy.textContent = 'CrownRing reviews and comments appear here when a line is marked as Revision.';
-    factoryChatThread.innerHTML = `
+    refs.discussionCopy.textContent = 'CrownRing reviews and comments appear here when a line is marked as Revision.';
+    refs.chatThread.innerHTML = `
       <article class="message system-message">
         <header>
           <strong>Discussion locked</strong>
@@ -397,8 +603,8 @@ function renderFactoryDetail() {
         </header>
         <p>This line is currently ${line.status}. Select a Revision line to review CrownRing comments and respond.</p>
       </article>`;
-    factoryChatForm.classList.add('hidden');
-    factoryChatInput.value = '';
+    refs.chatForm.classList.add('hidden');
+    refs.chatInput.value = '';
   }
 }
 
@@ -409,8 +615,10 @@ function renderMetrics() {
 }
 
 function rerender() {
-  renderFactoryTable();
-  renderFactoryDetail();
+  FACTORIES.forEach((factory) => {
+    renderFactoryTable(factory);
+    renderFactoryDetail(factory);
+  });
   renderAdminList();
   renderAdminDetail();
   renderMetrics();
@@ -427,69 +635,96 @@ function setStatus(status, commentBody) {
     line.messages.push({ author: CROWNRING_REVIEWER, body: commentBody, time: MESSAGE_TIME });
   }
 
-  selectedFactoryLineId = line.id;
+  selectedFactoryLineIds[line.factoryName] = line.id;
   rerender();
 }
 
-barcodeInput.addEventListener('input', () => {
-  applyUidAutofill(barcodeInput.value);
-});
+FACTORIES.forEach((factory) => {
+  const refs = getFactoryRefs(factory);
+  refs.form.elements.factoryName.value = factory;
+  refs.form.elements.eta.value = TODAY;
 
-queueSearchInput.addEventListener('input', (event) => {
-  factoryFilters.query = event.currentTarget.value;
-  rerender();
-});
+  refs.barcodeInput.addEventListener('input', () => {
+    applyUidAutofill(factory, refs.barcodeInput.value);
+  });
 
-queueStatusFilter.addEventListener('change', (event) => {
-  factoryFilters.status = event.currentTarget.value;
-  rerender();
-});
+  refs.searchInput.addEventListener('input', (event) => {
+    factoryFilters[factory].query = event.currentTarget.value;
+    rerender();
+  });
 
-queueSortSelect.addEventListener('change', (event) => {
-  factoryFilters.sort = event.currentTarget.value;
-  rerender();
-});
+  refs.statusFilter.addEventListener('change', (event) => {
+    factoryFilters[factory].status = event.currentTarget.value;
+    rerender();
+  });
 
-lineForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-  formMessage.style.color = '#fda4af';
-  formMessage.textContent = '';
+  refs.sortSelect.addEventListener('change', (event) => {
+    factoryFilters[factory].sort = event.currentTarget.value;
+    rerender();
+  });
 
-  const formData = new FormData(event.currentTarget);
-  const barcode = normalizeUid(String(formData.get('barcode') || ''));
-  const webOrder = String(formData.get('webOrder') || '').trim();
+  refs.form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    refs.formMessage.style.color = '#fda4af';
+    refs.formMessage.textContent = '';
 
-  if (!barcode && !webOrder) {
-    formMessage.textContent = 'Please provide either a Barcode/UID or a Web Order Number.';
-    return;
-  }
+    const formData = new FormData(event.currentTarget);
+    const barcode = normalizeUid(String(formData.get('barcode') || ''));
+    const webOrder = String(formData.get('webOrder') || '').trim();
 
-  const knownUid = uidCatalog[barcode];
+    if (!barcode && !webOrder) {
+      refs.formMessage.textContent = 'Please provide either a Barcode/UID or a Web Order Number.';
+      return;
+    }
 
-  const newLine = {
-    id: Date.now(),
-    factoryName: CREATIONS_FACTORY,
-    barcode,
-    webOrder: webOrder || knownUid?.webOrder || '',
-    style: String(formData.get('style')).trim(),
-    cadFile: String(formData.get('cadFile')).trim(),
-    specFile: String(formData.get('specFile')).trim(),
-    eta: String(formData.get('eta')).trim() || TODAY,
-    status: 'File Uploaded',
-    updatedAt: TIMESTAMP,
-    note: String(formData.get('note')).trim(),
-    messages: [{ author: CREATIONS_FACTORY, body: 'New CAD/spec pack uploaded and waiting for CrownRing review.', time: MESSAGE_TIME }]
-  };
+    const knownUid = uidCatalog[factory][barcode];
+    const newLine = {
+      id: Date.now() + Math.floor(Math.random() * 1000),
+      factoryName: factory,
+      barcode,
+      webOrder: webOrder || knownUid?.webOrder || '',
+      style: String(formData.get('style')).trim(),
+      cadFile: String(formData.get('cadFile')).trim(),
+      specFile: String(formData.get('specFile')).trim(),
+      eta: String(formData.get('eta')).trim() || TODAY,
+      status: 'File Uploaded',
+      updatedAt: TIMESTAMP,
+      note: String(formData.get('note')).trim(),
+      messages: [{ author: factory, body: 'New CAD/spec pack uploaded and waiting for CrownRing review.', time: MESSAGE_TIME }],
+      ...(factory === 'Uni-Design'
+        ? {
+            sampleSet: String(formData.get('sampleSet') || '').trim(),
+            metalCallout: String(formData.get('metalCallout') || '').trim()
+          }
+        : {})
+    };
 
-  lines.unshift(newLine);
-  selectedLineId = newLine.id;
-  selectedFactoryLineId = newLine.id;
-  event.currentTarget.reset();
-  factoryNameInput.value = CREATIONS_FACTORY;
-  etaInput.value = TODAY;
-  rerender();
-  formMessage.style.color = '#86efac';
-  formMessage.textContent = 'Line uploaded successfully. CrownRing can now review it.';
+    lines.unshift(newLine);
+    selectedLineId = newLine.id;
+    selectedFactoryLineIds[factory] = newLine.id;
+    event.currentTarget.reset();
+    refs.form.elements.factoryName.value = factory;
+    refs.form.elements.eta.value = TODAY;
+    rerender();
+    refs.formMessage.style.color = '#86efac';
+    refs.formMessage.textContent = `${factory} line uploaded successfully. CrownRing can now review it.`;
+  });
+
+  refs.chatForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const body = refs.chatInput.value.trim();
+
+    if (!body) return;
+
+    const line = lines.find((entry) => entry.id === selectedFactoryLineIds[factory]);
+    if (!line || line.status !== 'Revision') return;
+
+    line.messages.push({ author: factory, body, time: MESSAGE_TIME });
+    line.updatedAt = TIMESTAMP;
+    selectedLineId = line.id;
+    refs.chatInput.value = '';
+    rerender();
+  });
 });
 
 document.querySelector('#chat-form').addEventListener('submit', (event) => {
@@ -504,24 +739,8 @@ document.querySelector('#chat-form').addEventListener('submit', (event) => {
 
   line.messages.push({ author: CROWNRING_REVIEWER, body, time: MESSAGE_TIME });
   line.updatedAt = TIMESTAMP;
-  selectedFactoryLineId = line.id;
+  selectedFactoryLineIds[line.factoryName] = line.id;
   input.value = '';
-  rerender();
-});
-
-factoryChatForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-  const body = factoryChatInput.value.trim();
-
-  if (!body) return;
-
-  const line = lines.find((entry) => entry.id === selectedFactoryLineId);
-  if (!line || line.status !== 'Revision') return;
-
-  line.messages.push({ author: CREATIONS_FACTORY, body, time: MESSAGE_TIME });
-  line.updatedAt = TIMESTAMP;
-  selectedLineId = line.id;
-  factoryChatInput.value = '';
   rerender();
 });
 
@@ -542,7 +761,8 @@ document.addEventListener('click', (event) => {
   const factoryRow = event.target.closest('[data-factory-line-id]');
   if (factoryRow) {
     const lineId = Number(factoryRow.dataset.factoryLineId);
-    selectedFactoryLineId = lineId;
+    const factory = factoryRow.dataset.factoryName;
+    selectedFactoryLineIds[factory] = lineId;
     selectedLineId = lineId;
     rerender();
   }
@@ -558,6 +778,4 @@ document.addEventListener('click', (event) => {
   }
 });
 
-factoryNameInput.value = CREATIONS_FACTORY;
-etaInput.value = TODAY;
 rerender();
