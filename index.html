@@ -16,7 +16,7 @@
     <div class="page-shell">
       <aside class="sidebar">
         <div>
-          <p class="eyebrow">Creations collaboration</p>
+          <p class="eyebrow">Multi-factory collaboration</p>
           <h1>CAD Approvals</h1>
           <p class="sidebar-copy">
             Review inbound CAD packs, spec sheets, and revision loops before rings reach production.
@@ -24,13 +24,17 @@
         </div>
 
         <nav class="nav-cards" aria-label="Primary views">
-          <button class="nav-card active" data-view-target="factory-view">
+          <button class="nav-card active" data-view-target="creations-view">
             <span>Creations View</span>
-            <small>Submit files &amp; track line status</small>
+            <small>Submit files &amp; track Creations status</small>
+          </button>
+          <button class="nav-card" data-view-target="uni-design-view">
+            <span>Uni-Design View</span>
+            <small>Submit files &amp; track Uni-Design status</small>
           </button>
           <button class="nav-card" data-view-target="admin-view">
             <span>CrownRing View</span>
-            <small>Review uploads, comment, and request revisions</small>
+            <small>Review Creations and Uni-Design queues</small>
           </button>
         </nav>
 
@@ -56,14 +60,14 @@
             <p class="eyebrow">Pre-production control</p>
             <h2>Barcode/UID required for every submission.</h2>
             <p>
-              Creations uploads CAD and spec sheets first. Entering a known UID auto-fills the linked order details,
-              style SKU, and requested approval date so the line is ready for admin review faster.
+              Creations and Uni-Design each manage their own intake requirements. CrownRing sees every
+              submission in one review queue so revision loops and approvals stay centralized.
             </p>
           </div>
           <div class="hero-pill-group">
             <div class="hero-pill">
               <span>Step 1</span>
-              <strong>Creations uploads files</strong>
+              <strong>Factory uploads files</strong>
             </div>
             <div class="hero-pill">
               <span>Step 2</span>
@@ -76,7 +80,7 @@
           </div>
         </header>
 
-        <section class="view active" id="factory-view">
+        <section class="view active" id="creations-view" data-factory-view="Creations">
           <div class="panel-grid factory-grid">
             <section class="panel form-panel">
               <div class="panel-heading">
@@ -86,53 +90,53 @@
                 </div>
               </div>
 
-              <form id="line-form" class="line-form">
+              <form class="line-form" data-factory-form="Creations">
                 <div class="input-group">
-                  <label for="factory-name">Factory</label>
-                  <input id="factory-name" name="factoryName" value="Creations" readonly />
+                  <label for="creations-factory-name">Factory</label>
+                  <input id="creations-factory-name" name="factoryName" value="Creations" readonly />
                 </div>
 
                 <div class="input-row">
                   <div class="input-group">
-                    <label for="barcode">Barcode / UID</label>
-                    <input id="barcode" name="barcode" placeholder="UID-20481" />
-                    <small class="field-hint">Enter a UID to auto-fill the linked web order, ring style, and today's approval date.</small>
+                    <label for="creations-barcode">Barcode / UID</label>
+                    <input id="creations-barcode" name="barcode" placeholder="UID-20481" />
+                    <small class="field-hint">Known Creations UIDs auto-fill web order, ring style, linked files, and requested approval date.</small>
                   </div>
                   <div class="input-group">
-                    <label for="web-order">Web Order #</label>
-                    <input id="web-order" name="webOrder" placeholder="WEB-903144" />
-                  </div>
-                </div>
-
-                <div class="input-row">
-                  <div class="input-group">
-                    <label for="style">Ring Style</label>
-                    <input id="style" name="style" placeholder="Oval Solitaire / 18K" required />
-                  </div>
-                  <div class="input-group">
-                    <label for="cad-file">CAD file</label>
-                    <input id="cad-file" name="cadFile" placeholder="oval-solitaire-v2.step" required />
+                    <label for="creations-web-order">Web Order #</label>
+                    <input id="creations-web-order" name="webOrder" placeholder="WEB-903144" />
                   </div>
                 </div>
 
                 <div class="input-row">
                   <div class="input-group">
-                    <label for="spec-file">Spec sheet</label>
-                    <input id="spec-file" name="specFile" placeholder="oval-solitaire-spec.pdf" required />
+                    <label for="creations-style">Ring Style</label>
+                    <input id="creations-style" name="style" placeholder="Oval Solitaire / 18K" required />
                   </div>
                   <div class="input-group">
-                    <label for="eta">Requested approval date</label>
-                    <input id="eta" name="eta" type="date" required />
+                    <label for="creations-cad-file">CAD file</label>
+                    <input id="creations-cad-file" name="cadFile" placeholder="oval-solitaire-v2.step" required />
+                  </div>
+                </div>
+
+                <div class="input-row">
+                  <div class="input-group">
+                    <label for="creations-spec-file">Spec sheet</label>
+                    <input id="creations-spec-file" name="specFile" placeholder="oval-solitaire-spec.pdf" required />
+                  </div>
+                  <div class="input-group">
+                    <label for="creations-eta">Requested approval date</label>
+                    <input id="creations-eta" name="eta" type="date" required />
                   </div>
                 </div>
 
                 <div class="input-group">
-                  <label for="factory-note">Factory note</label>
-                  <textarea id="factory-note" name="note" rows="4" placeholder="Stone dimensions confirmed. Prongs adjusted for center stone height."></textarea>
+                  <label for="creations-note">Factory note</label>
+                  <textarea id="creations-note" name="note" rows="4" placeholder="Stone dimensions confirmed. Prongs adjusted for center stone height."></textarea>
                 </div>
 
-                <p class="form-hint">Use a UID whenever possible so linked order details are filled in automatically for Creations.</p>
-                <p id="form-message" class="form-message" aria-live="polite"></p>
+                <p class="form-hint">Use a Creations UID whenever possible so linked order details are filled in automatically.</p>
+                <p class="form-message" data-form-message="Creations" aria-live="polite"></p>
 
                 <button type="submit" class="primary-btn">Upload for CrownRing Review</button>
               </form>
@@ -144,17 +148,17 @@
                   <p class="eyebrow">Live queue</p>
                   <h3>Creations submissions</h3>
                 </div>
-                <span class="count-chip" id="line-count-chip">0 active lines</span>
+                <span class="count-chip" data-line-count-chip="Creations">0 active lines</span>
               </div>
 
-              <div class="table-toolbar" aria-label="Submission search, filters, and sorting">
+              <div class="table-toolbar" aria-label="Creations submission search, filters, and sorting">
                 <label class="toolbar-field toolbar-search">
                   <span>Search</span>
-                  <input id="queue-search" type="search" placeholder="Search UID, web order, status, or file" />
+                  <input data-queue-search="Creations" type="search" placeholder="Search UID, web order, status, or file" />
                 </label>
                 <label class="toolbar-field">
                   <span>Status</span>
-                  <select id="queue-status-filter">
+                  <select data-queue-status-filter="Creations">
                     <option>All Statuses</option>
                     <option>File Uploaded</option>
                     <option>Revision</option>
@@ -163,7 +167,7 @@
                 </label>
                 <label class="toolbar-field">
                   <span>Sort</span>
-                  <select id="queue-sort">
+                  <select data-queue-sort="Creations">
                     <option value="updated-desc">Newest activity</option>
                     <option value="updated-asc">Oldest activity</option>
                     <option value="style-asc">Ring style A–Z</option>
@@ -183,38 +187,197 @@
                       <th>Updated</th>
                     </tr>
                   </thead>
-                  <tbody id="factory-table-body"></tbody>
+                  <tbody data-factory-table-body="Creations"></tbody>
                 </table>
               </div>
             </section>
           </div>
 
           <section class="panel factory-detail-panel">
-            <div id="factory-empty-state" class="empty-state compact hidden">
+            <div class="empty-state compact hidden" data-factory-empty-state="Creations">
               <h3>Select a line</h3>
-              <p>Choose a submission to inspect the full file package and review any revision discussion.</p>
+              <p>Choose a Creations submission to inspect the full file package and review any revision discussion.</p>
             </div>
 
-            <div id="factory-detail" class="factory-detail">
+            <div class="factory-detail" data-factory-detail="Creations">
               <div class="detail-header">
                 <div>
                   <p class="eyebrow">Factory detail</p>
-                  <h3 id="factory-detail-title"></h3>
+                  <h3 data-factory-detail-title="Creations"></h3>
                 </div>
-                <span id="factory-detail-status" class="status-badge"></span>
+                <span data-factory-detail-status="Creations" class="status-badge"></span>
               </div>
 
-              <div class="detail-meta" id="factory-detail-meta"></div>
-              <div class="file-cards detailed" id="factory-detail-files"></div>
+              <div class="detail-meta" data-factory-detail-meta="Creations"></div>
+              <div class="file-cards detailed" data-factory-detail-files="Creations"></div>
 
               <section class="chat-panel revision-thread-panel">
                 <div class="chat-header">
                   <h4>CrownRing reviews and comments</h4>
-                  <p id="factory-discussion-copy">Discussion becomes available when a line is marked as Revision.</p>
+                  <p data-factory-discussion-copy="Creations">Discussion becomes available when a line is marked as Revision.</p>
                 </div>
-                <div id="factory-chat-thread" class="chat-thread"></div>
-                <form id="factory-chat-form" class="chat-form hidden">
-                  <textarea id="factory-chat-input" rows="3" placeholder="Reply to the revision request with your update..."></textarea>
+                <div data-factory-chat-thread="Creations" class="chat-thread"></div>
+                <form class="chat-form hidden" data-factory-chat-form="Creations">
+                  <textarea data-factory-chat-input="Creations" rows="3" placeholder="Reply to the revision request with your update..."></textarea>
+                  <div class="chat-actions">
+                    <button type="submit" class="primary-btn">Send factory reply</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="uni-design-view" data-factory-view="Uni-Design">
+          <div class="panel-grid factory-grid">
+            <section class="panel form-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Uni-Design intake</p>
+                  <h3>Create a new approval line</h3>
+                </div>
+              </div>
+
+              <form class="line-form" data-factory-form="Uni-Design">
+                <div class="input-group">
+                  <label for="uni-factory-name">Factory</label>
+                  <input id="uni-factory-name" name="factoryName" value="Uni-Design" readonly />
+                </div>
+
+                <div class="input-row">
+                  <div class="input-group">
+                    <label for="uni-barcode">Barcode / UID</label>
+                    <input id="uni-barcode" name="barcode" placeholder="UNI-50192" />
+                    <small class="field-hint">Known Uni-Design UIDs auto-fill style, order, sample set, and milestone target date.</small>
+                  </div>
+                  <div class="input-group">
+                    <label for="uni-web-order">Web Order #</label>
+                    <input id="uni-web-order" name="webOrder" placeholder="WEB-905880" />
+                  </div>
+                </div>
+
+                <div class="input-row">
+                  <div class="input-group">
+                    <label for="uni-style">Ring Style</label>
+                    <input id="uni-style" name="style" placeholder="Signature Hidden Halo / 18K" required />
+                  </div>
+                  <div class="input-group">
+                    <label for="uni-cad-file">CAD file</label>
+                    <input id="uni-cad-file" name="cadFile" placeholder="signature-halo-r2.step" required />
+                  </div>
+                </div>
+
+                <div class="input-row">
+                  <div class="input-group">
+                    <label for="uni-spec-file">Spec sheet</label>
+                    <input id="uni-spec-file" name="specFile" placeholder="signature-halo-r2.pdf" required />
+                  </div>
+                  <div class="input-group">
+                    <label for="uni-eta">Requested approval date</label>
+                    <input id="uni-eta" name="eta" type="date" required />
+                  </div>
+                </div>
+
+                <div class="input-row">
+                  <div class="input-group">
+                    <label for="uni-sample-set">Sample set #</label>
+                    <input id="uni-sample-set" name="sampleSet" placeholder="SET-118" />
+                  </div>
+                  <div class="input-group">
+                    <label for="uni-plating">Metal / plating callout</label>
+                    <input id="uni-plating" name="metalCallout" placeholder="18K Yellow / Bright polish" />
+                  </div>
+                </div>
+
+                <div class="input-group">
+                  <label for="uni-note">Factory note</label>
+                  <textarea id="uni-note" name="note" rows="4" placeholder="Include sample-set notes, plating direction, or assembly instructions for CrownRing."></textarea>
+                </div>
+
+                <p class="form-hint">Uni-Design submissions capture sample set and metal/plating details in addition to the core CAD package.</p>
+                <p class="form-message" data-form-message="Uni-Design" aria-live="polite"></p>
+
+                <button type="submit" class="primary-btn">Upload for CrownRing Review</button>
+              </form>
+            </section>
+
+            <section class="panel table-panel">
+              <div class="panel-heading split">
+                <div>
+                  <p class="eyebrow">Live queue</p>
+                  <h3>Uni-Design submissions</h3>
+                </div>
+                <span class="count-chip" data-line-count-chip="Uni-Design">0 active lines</span>
+              </div>
+
+              <div class="table-toolbar" aria-label="Uni-Design submission search, filters, and sorting">
+                <label class="toolbar-field toolbar-search">
+                  <span>Search</span>
+                  <input data-queue-search="Uni-Design" type="search" placeholder="Search UID, web order, sample set, or file" />
+                </label>
+                <label class="toolbar-field">
+                  <span>Status</span>
+                  <select data-queue-status-filter="Uni-Design">
+                    <option>All Statuses</option>
+                    <option>File Uploaded</option>
+                    <option>Revision</option>
+                    <option>Approved</option>
+                  </select>
+                </label>
+                <label class="toolbar-field">
+                  <span>Sort</span>
+                  <select data-queue-sort="Uni-Design">
+                    <option value="updated-desc">Newest activity</option>
+                    <option value="updated-asc">Oldest activity</option>
+                    <option value="style-asc">Ring style A–Z</option>
+                    <option value="status-asc">Status</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Line</th>
+                      <th>Identifiers</th>
+                      <th>Files</th>
+                      <th>Status</th>
+                      <th>Updated</th>
+                    </tr>
+                  </thead>
+                  <tbody data-factory-table-body="Uni-Design"></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <section class="panel factory-detail-panel">
+            <div class="empty-state compact hidden" data-factory-empty-state="Uni-Design">
+              <h3>Select a line</h3>
+              <p>Choose a Uni-Design submission to inspect its package, plating callouts, and revision discussion.</p>
+            </div>
+
+            <div class="factory-detail" data-factory-detail="Uni-Design">
+              <div class="detail-header">
+                <div>
+                  <p class="eyebrow">Factory detail</p>
+                  <h3 data-factory-detail-title="Uni-Design"></h3>
+                </div>
+                <span data-factory-detail-status="Uni-Design" class="status-badge"></span>
+              </div>
+
+              <div class="detail-meta" data-factory-detail-meta="Uni-Design"></div>
+              <div class="file-cards detailed" data-factory-detail-files="Uni-Design"></div>
+
+              <section class="chat-panel revision-thread-panel">
+                <div class="chat-header">
+                  <h4>CrownRing reviews and comments</h4>
+                  <p data-factory-discussion-copy="Uni-Design">Discussion becomes available when a line is marked as Revision.</p>
+                </div>
+                <div data-factory-chat-thread="Uni-Design" class="chat-thread"></div>
+                <form class="chat-form hidden" data-factory-chat-form="Uni-Design">
+                  <textarea data-factory-chat-input="Uni-Design" rows="3" placeholder="Reply to the revision request with your update..."></textarea>
                   <div class="chat-actions">
                     <button type="submit" class="primary-btn">Send factory reply</button>
                   </div>
@@ -227,39 +390,37 @@
         <section class="view" id="admin-view">
           <div class="panel-grid admin-grid">
             <section class="panel admin-list-panel">
-              <div class="panel-heading split">
+              <div class="panel-heading">
                 <div>
-                  <p class="eyebrow">CrownRing workspace</p>
-                  <h3>Lines awaiting review</h3>
+                  <p class="eyebrow">CrownRing review queue</p>
+                  <h3>All factory submissions</h3>
                 </div>
-                <span class="count-chip">Chat-enabled review</span>
               </div>
-              <div class="admin-line-list" id="admin-line-list"></div>
+              <div id="admin-line-list" class="admin-line-list"></div>
             </section>
 
             <section class="panel admin-detail-panel">
-              <div id="admin-empty-state" class="empty-state">
-                <h3>Select a line</h3>
-                <p>Choose a file upload from the left to inspect CAD/spec files, read messages, and update the status.</p>
+              <div id="admin-empty-state" class="empty-state hidden">
+                <h3>Select a submission</h3>
+                <p>Choose a submission from any factory to inspect the package and continue the review thread.</p>
               </div>
 
-              <div id="admin-detail" class="admin-detail hidden">
+              <div id="admin-detail">
                 <div class="detail-header">
                   <div>
-                    <p class="eyebrow">Selected submission</p>
+                    <p class="eyebrow">Submission detail</p>
                     <h3 id="detail-title"></h3>
                   </div>
                   <span id="detail-status-badge" class="status-badge"></span>
                 </div>
 
                 <div class="detail-meta" id="detail-meta"></div>
-
-                <div class="file-cards" id="detail-files"></div>
+                <div class="file-cards detailed" id="detail-files"></div>
 
                 <section class="chat-panel">
                   <div class="chat-header">
                     <h4>CrownRing reviews and comments</h4>
-                    <p>Use the thread to leave CrownRing review notes, request revisions, or confirm approval with Creations.</p>
+                    <p>Use the thread to leave CrownRing review notes, request revisions, or confirm approval with each factory.</p>
                   </div>
                   <div id="chat-thread" class="chat-thread"></div>
                   <form id="chat-form" class="chat-form">
