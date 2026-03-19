@@ -391,11 +391,6 @@ function applyUidAutofill(factory, uid) {
     form.elements.note.value = lookup.note;
     form.elements.eta.value = TODAY;
 
-    if (factory === 'Uni-Design') {
-      form.elements.sampleSet.value = lookup.sampleSet;
-      form.elements.metalCallout.value = lookup.metalCallout;
-    }
-
     refs.formMessage.style.color = '#2563eb';
     refs.formMessage.textContent = `UID recognized. Linked ${factory} order details were filled in for ${normalizeUid(uid)}.`;
     return;
@@ -406,11 +401,6 @@ function applyUidAutofill(factory, uid) {
       form.elements[field].value = '';
     });
     form.elements.eta.value = TODAY;
-
-    if (factory === 'Uni-Design') {
-      form.elements.sampleSet.value = '';
-      form.elements.metalCallout.value = '';
-    }
 
     refs.formMessage.style.color = '#f59e0b';
     refs.formMessage.textContent = `UID not found in the ${factory} lookup yet. Enter the remaining details manually.`;
@@ -690,13 +680,7 @@ FACTORIES.forEach((factory) => {
       status: 'File Uploaded',
       updatedAt: TIMESTAMP,
       note: String(formData.get('note')).trim(),
-      messages: [{ author: factory, body: 'New CAD/spec pack uploaded and waiting for CrownRing review.', time: MESSAGE_TIME }],
-      ...(factory === 'Uni-Design'
-        ? {
-            sampleSet: String(formData.get('sampleSet') || '').trim(),
-            metalCallout: String(formData.get('metalCallout') || '').trim()
-          }
-        : {})
+      messages: [{ author: factory, body: 'New CAD/spec pack uploaded and waiting for CrownRing review.', time: MESSAGE_TIME }]
     };
 
     lines.unshift(newLine);

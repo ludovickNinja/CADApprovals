@@ -60,7 +60,7 @@
             <p class="eyebrow">Pre-production control</p>
             <h2>Barcode/UID required for every submission.</h2>
             <p>
-              Creations and Uni-Design each manage their own intake requirements. CrownRing sees every
+              Creations and Uni-Design now follow the same intake requirements. CrownRing sees every
               submission in one review queue so revision loops and approvals stay centralized.
             </p>
           </div>
@@ -248,7 +248,7 @@
                   <div class="input-group">
                     <label for="uni-barcode">Barcode / UID</label>
                     <input id="uni-barcode" name="barcode" placeholder="UNI-50192" />
-                    <small class="field-hint">Known Uni-Design UIDs auto-fill style, order, sample set, and milestone target date.</small>
+                    <small class="field-hint">Known Uni-Design UIDs auto-fill web order, ring style, linked files, and requested approval date.</small>
                   </div>
                   <div class="input-group">
                     <label for="uni-web-order">Web Order #</label>
@@ -278,23 +278,12 @@
                   </div>
                 </div>
 
-                <div class="input-row">
-                  <div class="input-group">
-                    <label for="uni-sample-set">Sample set #</label>
-                    <input id="uni-sample-set" name="sampleSet" placeholder="SET-118" />
-                  </div>
-                  <div class="input-group">
-                    <label for="uni-plating">Metal / plating callout</label>
-                    <input id="uni-plating" name="metalCallout" placeholder="18K Yellow / Bright polish" />
-                  </div>
-                </div>
-
                 <div class="input-group">
                   <label for="uni-note">Factory note</label>
-                  <textarea id="uni-note" name="note" rows="4" placeholder="Include sample-set notes, plating direction, or assembly instructions for CrownRing."></textarea>
+                  <textarea id="uni-note" name="note" rows="4" placeholder="Stone dimensions confirmed. Prongs adjusted for center stone height."></textarea>
                 </div>
 
-                <p class="form-hint">Uni-Design submissions capture sample set and metal/plating details in addition to the core CAD package.</p>
+                <p class="form-hint">Use a Uni-Design UID whenever possible so linked order details are filled in automatically.</p>
                 <p class="form-message" data-form-message="Uni-Design" aria-live="polite"></p>
 
                 <button type="submit" class="primary-btn">Upload for CrownRing Review</button>
@@ -313,7 +302,7 @@
               <div class="table-toolbar" aria-label="Uni-Design submission search, filters, and sorting">
                 <label class="toolbar-field toolbar-search">
                   <span>Search</span>
-                  <input data-queue-search="Uni-Design" type="search" placeholder="Search UID, web order, sample set, or file" />
+                  <input data-queue-search="Uni-Design" type="search" placeholder="Search UID, web order, status, or file" />
                 </label>
                 <label class="toolbar-field">
                   <span>Status</span>
@@ -355,7 +344,7 @@
           <section class="panel factory-detail-panel">
             <div class="empty-state compact hidden" data-factory-empty-state="Uni-Design">
               <h3>Select a line</h3>
-              <p>Choose a Uni-Design submission to inspect its package, plating callouts, and revision discussion.</p>
+              <p>Choose a Uni-Design submission to inspect the full file package and review any revision discussion.</p>
             </div>
 
             <div class="factory-detail" data-factory-detail="Uni-Design">
