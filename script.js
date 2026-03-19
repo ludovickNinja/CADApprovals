@@ -3,6 +3,8 @@ const TIMESTAMP = '2026-03-18 10:00 UTC';
 const CROWNRING_REVIEWER = 'CrownRing';
 const MESSAGE_TIME = '10:00 UTC';
 const FACTORIES = ['Creations', 'Uni-Design'];
+const PREVIEWABLE_MIME_PREFIXES = ['image/'];
+const PREVIEWABLE_MIME_TYPES = ['application/pdf', 'text/plain'];
 
 const uidCatalog = {
   Creations: {
@@ -58,6 +60,85 @@ const uidCatalog = {
     }
   }
 };
+
+
+function createFileRecord(value, fallbackType = '') {
+  if (!value) return null;
+
+  if (typeof value === 'string') {
+    return {
+      name: value,
+      url: '',
+      type: fallbackType || '',
+      previewable: false,
+      source: 'catalog'
+    };
+  }
+
+  if (value instanceof File) {
+    if (!value.name) return null;
+    const type = value.type || fallbackType || '';
+    return {
+      name: value.name,
+      url: URL.createObjectURL(value),
+      type,
+      previewable: PREVIEWABLE_MIME_TYPES.includes(type) || PREVIEWABLE_MIME_PREFIXES.some((prefix) => type.startsWith(prefix)),
+      source: 'upload'
+    };
+  }
+
+  return value;
+}
+
+function hydrateLineFiles(line) {
+  return {
+    ...line,
+    cadFile: createFileRecord(line.cadFile),
+    specFile: createFileRecord(line.specFile, 'application/pdf')
+  };
+}
+
+function hydrateCatalogFiles(catalog) {
+  Object.values(catalog).forEach((entry) => {
+    entry.cadFile = createFileRecord(entry.cadFile);
+    entry.specFile = createFileRecord(entry.specFile, 'application/pdf');
+  });
+}
+
+function getFileName(file) {
+  return file?.name || 'Not provided';
+}
+
+function createFileLinkMarkup(file, linkLabel = 'Open file') {
+  if (!file) {
+    return '<p>No file attached</p>';
+  }
+
+  if (!file.url) {
+    return `<p>${file.name}</p>`;
+  }
+
+  return `
+    <p>${file.name}</p>
+    <a class="file-link" href="${file.url}" target="_blank" rel="noreferrer">${linkLabel}</a>
+  `;
+}
+
+function createFilePreviewMarkup(file) {
+  if (!file?.url || !file.previewable) {
+    return '<p class="file-preview-empty">Preview becomes available here when the uploaded file can be rendered in the browser.</p>';
+  }
+
+  if (file.type === 'application/pdf') {
+    return `<iframe class="file-preview-frame" src="${file.url}" title="${file.name}"></iframe>`;
+  }
+
+  if (file.type.startsWith('image/')) {
+    return `<img class="file-preview-image" src="${file.url}" alt="Preview of ${file.name}" />`;
+  }
+
+  return `<iframe class="file-preview-frame" src="${file.url}" title="${file.name}"></iframe>`;
+}
 
 const lines = [
   {
@@ -266,6 +347,13 @@ const lines = [
   }
 ];
 
+hydrateCatalogFiles(uidCatalog.Creations);
+hydrateCatalogFiles(uidCatalog['Uni-Design']);
+
+const hydratedLines = lines.map(hydrateLineFiles);
+lines.length = 0;
+lines.push(...hydratedLines);
+
 let selectedLineId = lines[0]?.id ?? null;
 const selectedFactoryLineIds = Object.fromEntries(FACTORIES.map((factory) => [factory, lines.find((line) => line.factoryName === factory)?.id ?? null]));
 const factoryFilters = Object.fromEntries(
@@ -323,11 +411,12 @@ function createFileCard(label, fileName, description) {
   return `
     <article class="file-card">
       <strong>${label}</strong>
-      <p>${fileName}</p>
+      ${createFileLinkMarkup(fileName)}
       <small>${description}</small>
     </article>
   `;
 }
+
 
 function createMessageMarkup(message) {
   return `
@@ -353,7 +442,7 @@ function getVisibleFactoryLines(factory) {
     .filter((line) => {
       const matchesQuery =
         !query ||
-        [line.style, line.barcode, line.webOrder, line.status, line.cadFile, line.specFile, line.sampleSet, line.metalCallout]
+        [line.style, line.barcode, line.webOrder, line.status, getFileName(line.cadFile), getFileName(line.specFile), line.sampleSet, line.metalCallout]
           .filter(Boolean)
           .some((value) => value.toLowerCase().includes(query));
 
@@ -386,18 +475,16 @@ function applyUidAutofill(factory, uid) {
   if (isKnownUid) {
     form.elements.webOrder.value = lookup.webOrder;
     form.elements.style.value = lookup.style;
-    form.elements.cadFile.value = lookup.cadFile;
-    form.elements.specFile.value = lookup.specFile;
     form.elements.note.value = lookup.note;
     form.elements.eta.value = TODAY;
 
     refs.formMessage.style.color = '#2563eb';
-    refs.formMessage.textContent = `UID recognized. Linked ${factory} order details were filled in for ${normalizeUid(uid)}.`;
+    refs.formMessage.textContent = `UID recognized. Linked ${factory} order details were filled in for ${normalizeUid(uid)}. Please upload the CAD and spec sheet files before submitting.`;
     return;
   }
 
   if (normalizeUid(uid)) {
-    ['webOrder', 'style', 'cadFile', 'specFile', 'note'].forEach((field) => {
+    ['webOrder', 'style', 'note'].forEach((field) => {
       form.elements[field].value = '';
     });
     form.elements.eta.value = TODAY;
@@ -437,8 +524,8 @@ function renderFactoryTable(factory) {
             ${line.sampleSet ? `<div>Sample Set: ${line.sampleSet}</div>` : ''}
           </td>
           <td>
-            <div>${line.cadFile}</div>
-            <div>${line.specFile}</div>
+            <div>${getFileName(line.cadFile)}</div>
+            <div>${getFileName(line.specFile)}</div>
           </td>
           <td>${createStatusBadge(line.status)}</td>
           <td>${line.updatedAt}</td>
@@ -525,6 +612,17 @@ function renderAdminDetail() {
     ...(line.sampleSet ? [createFileCard('Sample set', line.sampleSet, 'Uni-Design sample set tied to the mockup submission.')] : []),
     ...(line.metalCallout ? [createFileCard('Metal / plating', line.metalCallout, 'Finish direction supplied with the factory package.')] : [])
   ].join('');
+
+  detailFiles.insertAdjacentHTML('beforeend', `
+    <article class="file-preview-card">
+      <strong>CAD preview</strong>
+      ${createFilePreviewMarkup(line.cadFile)}
+    </article>
+    <article class="file-preview-card">
+      <strong>Spec sheet preview</strong>
+      ${createFilePreviewMarkup(line.specFile)}
+    </article>
+  `);
 
   chatThread.innerHTML = line.messages.map(createMessageMarkup).join('');
 }
@@ -674,8 +772,8 @@ FACTORIES.forEach((factory) => {
       barcode,
       webOrder: webOrder || knownUid?.webOrder || '',
       style: String(formData.get('style')).trim(),
-      cadFile: String(formData.get('cadFile')).trim(),
-      specFile: String(formData.get('specFile')).trim(),
+      cadFile: createFileRecord(formData.get('cadFile')),
+      specFile: createFileRecord(formData.get('specFile'), 'application/pdf'),
       eta: String(formData.get('eta')).trim() || TODAY,
       status: 'File Uploaded',
       updatedAt: TIMESTAMP,
