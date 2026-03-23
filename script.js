@@ -602,15 +602,11 @@ function renderAdminDetail() {
       <strong>${line.factoryName} note</strong>
       <p>${line.note || 'No note added.'}</p>
     </article>
-    ${line.sampleSet ? `<article><strong>Sample set #</strong><p>${line.sampleSet}</p></article>` : ''}
-    ${line.metalCallout ? `<article><strong>Metal / plating</strong><p>${line.metalCallout}</p></article>` : ''}
   `;
 
   detailFiles.innerHTML = [
     createFileCard('CAD file', line.cadFile, 'Primary geometry package submitted by the factory.'),
-    createFileCard('Spec sheet', line.specFile, 'Reference dimensions and manufacturing notes for CrownRing review.'),
-    ...(line.sampleSet ? [createFileCard('Sample set', line.sampleSet, 'Uni-Design sample set tied to the mockup submission.')] : []),
-    ...(line.metalCallout ? [createFileCard('Metal / plating', line.metalCallout, 'Finish direction supplied with the factory package.')] : [])
+    createFileCard('Spec sheet', line.specFile, 'Reference dimensions and manufacturing notes for CrownRing review.')
   ].join('');
 
   detailFiles.insertAdjacentHTML('beforeend', `
