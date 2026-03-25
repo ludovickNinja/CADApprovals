@@ -562,7 +562,12 @@ time {
 }
 
 .empty-state.compact {
-  min-height: 220px;
+  min-height: 180px;
+}
+
+#admin-empty-state {
+  min-height: 160px;
+  padding: 24px 0;
 }
 
 .detail-meta,
